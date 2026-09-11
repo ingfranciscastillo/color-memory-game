@@ -6,25 +6,54 @@ import {
 	MODE_LABELS,
 	MODES,
 } from "@/lib/modes";
+import { SITE_URL } from "@/lib/seo";
 import { loadStats, type Stats } from "@/lib/storage";
+
+const TITLE = "Color Memory — A minimal color memory game";
+const DESCRIPTION =
+	"See a color. Memorize it. Rebuild it. A minimal test of visual memory and perception, scored in perceptual color space.";
 
 export const Route = createFileRoute("/")({
 	head: () => ({
 		meta: [
-			{ title: "Color Memory — A minimal color memory game" },
+			{ title: TITLE },
 			{
 				name: "description",
-				content:
-					"See a color. Memorize it. Rebuild it. A minimal test of visual memory and perception, scored in perceptual color space.",
+				content: DESCRIPTION,
 			},
 			{
 				property: "og:title",
-				content: "Color Memory — A minimal color memory game",
+				content: TITLE,
 			},
 			{
 				property: "og:description",
-				content:
-					"How well can you remember a color? Play a quick round and find out.",
+				content: DESCRIPTION,
+			},
+			{
+				property: "og:url",
+				content: SITE_URL,
+			},
+			{
+				"script:ld+json": {
+					"@context": "https://schema.org",
+					"@type": "WebApplication",
+					name: "Color Memory",
+					url: SITE_URL,
+					description: DESCRIPTION,
+					applicationCategory: "GameApplication",
+					browserRequirements: "Requires JavaScript",
+					offers: {
+						"@type": "Offer",
+						price: "0",
+						priceCurrency: "USD",
+					},
+				},
+			},
+		],
+		links: [
+			{
+				rel: "canonical",
+				href: SITE_URL,
 			},
 		],
 	}),

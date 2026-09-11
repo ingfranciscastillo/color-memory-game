@@ -4,6 +4,7 @@ import { FinalScore } from "@/components/FinalScore";
 import { MemorizePhase } from "@/components/MemorizePhase";
 import { ResultPanel } from "@/components/ResultPanel";
 import { type GameMode, isGameMode, MODE_LABELS } from "@/lib/modes";
+import { SITE_URL } from "@/lib/seo";
 import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
 
 export const Route = createFileRoute("/play")({
@@ -22,6 +23,18 @@ export const Route = createFileRoute("/play")({
 			{
 				property: "og:description",
 				content: "Memorize a color, rebuild it, and score your perception.",
+			},
+			{
+				property: "og:url",
+				content: `${SITE_URL}/play`,
+			},
+		],
+		links: [
+			{
+				// One canonical for all modes — the mode search param doesn't
+				// change indexable content, so it shouldn't fragment ranking signals.
+				rel: "canonical",
+				href: `${SITE_URL}/play`,
 			},
 		],
 	}),
