@@ -40,6 +40,13 @@ const config = defineConfig({
 					],
 				},
 				{
+					pattern: "/stats",
+					localized: [
+						["en", "/en/stats"],
+						["es", "/es/estadisticas"],
+					],
+				},
+				{
 					pattern: "/profile",
 					localized: [
 						["en", "/en/profile"],

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayRouteImport } from './routes/play'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as StatsRouteImport } from './routes/stats'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCronCleanupRouteImport } from './routes/api/cron/cleanup'
 
@@ -36,6 +37,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StatsRoute = StatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/play': typeof PlayRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/stats': typeof StatsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/play': typeof PlayRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/stats': typeof StatsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/play': typeof PlayRoute
   '/profile': typeof ProfileRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/stats': typeof StatsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/cleanup': typeof ApiCronCleanupRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/play'
     | '/profile'
     | '/reset-password'
+    | '/stats'
     | '/api/auth/$'
     | '/api/cron/cleanup'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/play'
     | '/profile'
     | '/reset-password'
+    | '/stats'
     | '/api/auth/$'
     | '/api/cron/cleanup'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/play'
     | '/profile'
     | '/reset-password'
+    | '/stats'
     | '/api/auth/$'
     | '/api/cron/cleanup'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   PlayRoute: typeof PlayRoute
   ProfileRoute: typeof ProfileRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  StatsRoute: typeof StatsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCronCleanupRoute: typeof ApiCronCleanupRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stats': {
+      id: '/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof StatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlayRoute: PlayRoute,
   ProfileRoute: ProfileRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  StatsRoute: StatsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCronCleanupRoute: ApiCronCleanupRoute,
 }

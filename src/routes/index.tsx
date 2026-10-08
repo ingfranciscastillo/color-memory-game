@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AccountButton } from "@/components/account/AccountButton";
 import { SettingsBar } from "@/components/SettingsBar";
+import { authClient } from "@/lib/auth-client";
 import {
 	formatNumber,
 	localizedHead,
@@ -10,9 +11,10 @@ import {
 } from "@/lib/i18n";
 import { type GameMode, MODES } from "@/lib/modes";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
-import { loadStats, type Stats } from "@/lib/storage";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
+import { getSummary } from "@/server/stats";
+import type { PlayerSummary } from "@/server/stats-store";
 
 export const Route = createFileRoute("/")({
 	head: () => {
@@ -49,12 +51,33 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-	const [mode, setMode] = useState<GameMode>("classic");
-	const [stats, setStats] = useState<Stats | null>(null);
+	const [mode, setMode] = useState<GameMode>("daily");
+	const [summary, setSummary] = useState<PlayerSummary | null>(null);
+	const userId = authClient.useSession().data?.user.id;
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: userId is the trigger: reload when the player changes (sign in, sign out).
 	useEffect(() => {
-		setStats(loadStats());
-	}, []);
+		let cancelled = false;
+		getSummary()
+			.then((next) => {
+				if (!cancelled) setSummary(next);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, [userId]);
+
+	const summaryParts = summary
+		? [
+				m.home_best({ score: formatNumber(summary.bestScore) }),
+				summary.bestStreak ? m.streak({ count: summary.bestStreak }) : null,
+				summary.dailyStreak
+					? m.home_daily_streak({ count: summary.dailyStreak })
+					: null,
+				summary.dailyPlayedToday ? m.home_daily_done() : null,
+			].filter(Boolean)
+		: [];
 
 	return (
 		<main className="relative mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16 sm:px-10">
@@ -105,10 +128,15 @@ function Home() {
 				{m.home_play()}
 			</Link>
 
-			<p className="mt-10 text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums">
-				{m.home_best({ score: formatNumber(stats?.bestScore ?? 0) })}
-				{stats?.bestStreak ? ` · ${m.streak({ count: stats.bestStreak })}` : ""}
-			</p>
+			<div className="mt-10 flex flex-wrap items-baseline gap-x-8 gap-y-3 text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums">
+				{summaryParts.length > 0 && <p>{summaryParts.join(" · ")}</p>}
+				<Link
+					to="/stats"
+					className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+				>
+					{m.stats_link()}
+				</Link>
+			</div>
 
 			<div className="mt-16 border-t border-border pt-6">
 				<SettingsBar />

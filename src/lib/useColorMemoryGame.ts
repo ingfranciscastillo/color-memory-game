@@ -5,7 +5,6 @@ import type { GameTotals, GameView, GuessResult } from "@/server/games-store";
 import { authClient } from "./auth-client";
 import type { HSL } from "./color";
 import { type GameMode, roundsForMode } from "./modes";
-import { recordGame, recordRound } from "./storage";
 
 export type Phase =
 	| "loading"
@@ -153,11 +152,9 @@ export function useColorMemoryGame(mode: GameMode) {
 			setResult(scored);
 			setTarget(scored.target);
 			setTotals(scored.totals);
-			recordRound(scored.totals.maxStreak);
-			if (scored.finished) recordGame(mode, scored.totals.totalScore);
 			setPhase("result");
 		});
-	}, [gameId, phase, busy, call, roundIndex, guess, mode]);
+	}, [gameId, phase, busy, call, roundIndex, guess]);
 
 	const next = useCallback(() => {
 		if (!gameId || busy) return;
@@ -175,10 +172,9 @@ export function useColorMemoryGame(mode: GameMode) {
 		void call(async () => {
 			const view = await finishGame({ data: { id: gameId } });
 			setTotals(view.totals);
-			recordGame(mode, view.totals.totalScore);
 			setPhase("final");
 		});
-	}, [gameId, busy, call, mode]);
+	}, [gameId, busy, call]);
 
 	return {
 		phase,
