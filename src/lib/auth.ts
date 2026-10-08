@@ -1,6 +1,7 @@
 import { waitUntil } from "@vercel/functions";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { APIError } from "better-auth/api";
 import { captcha } from "better-auth/plugins";
 import { anonymous } from "better-auth/plugins/anonymous";
 import { emailOTP } from "better-auth/plugins/email-otp";
@@ -40,6 +41,54 @@ const socialProviders = {
 export const SOCIAL_PROVIDERS = Object.keys(socialProviders) as "discord"[];
 
 const appUrl = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+
+/**
+ * This deployment's own Vercel URLs (production, branch and the unique
+ * deployment URL). Listing them instead of `https://*.vercel.app` matters:
+ * the wildcard would also trust any other Vercel app, including one an
+ * attacker deploys, as a callbackURL/redirectTo target and request origin.
+ */
+const vercelOrigins = [
+	process.env.VERCEL_PROJECT_PRODUCTION_URL,
+	process.env.VERCEL_BRANCH_URL,
+	process.env.VERCEL_URL,
+]
+	.filter(Boolean)
+	.map((host) => `https://${host}`);
+
+const NAME_MAX = 24;
+const SEED_PATTERN = /^[A-Za-z0-9-]{1,64}$/;
+
+/**
+ * Display names are public (leaderboards), and `name`/`avatarSeed` can be
+ * set straight from the client: trim them, drop control characters and cap
+ * the length here, the only place every write goes through.
+ *
+ * On create the name may come from Discord (up to 32 characters), so it's
+ * shortened rather than rejected; edits from the profile are rejected.
+ */
+function cleanProfile<T extends { name?: string; avatarSeed?: unknown }>(
+	data: T,
+	{ truncate }: { truncate: boolean },
+): T {
+	const next = { ...data };
+	if (typeof next.name === "string") {
+		// biome-ignore lint/suspicious/noControlCharactersInRegex: stripping them is the point.
+		let name = next.name.replace(/[\u0000-\u001f\u007f]/g, "").trim();
+		if (truncate) name = name.slice(0, NAME_MAX).trim();
+		if (name.length < 2 || name.length > NAME_MAX) {
+			throw new APIError("BAD_REQUEST", { message: "Invalid name" });
+		}
+		next.name = name;
+	}
+	if (
+		next.avatarSeed != null &&
+		(typeof next.avatarSeed !== "string" || !SEED_PATTERN.test(next.avatarSeed))
+	) {
+		throw new APIError("BAD_REQUEST", { message: "Invalid avatar" });
+	}
+	return next;
+}
 
 /**
  * Emails aren't awaited (so response time doesn't reveal whether an account
@@ -119,19 +168,34 @@ export const auth = betterAuth({
 		user: {
 			create: {
 				// Every account starts with an avatar and a name (the email code doesn't ask for one).
-				before: async (user) => ({
-					data: {
-						...user,
-						avatarSeed:
-							(user as { avatarSeed?: string | null }).avatarSeed ??
-							crypto.randomUUID(),
-						name: user.name?.trim() || user.email.split("@")[0].slice(0, 24),
-					},
+				before: async (user) => {
+					const name = user.name?.trim() || user.email.split("@")[0];
+					return {
+						data: cleanProfile(
+							{
+								...user,
+								avatarSeed:
+									(user as { avatarSeed?: string | null }).avatarSeed ??
+									crypto.randomUUID(),
+								// Email local parts can be 1 character: pad to the minimum.
+								name: name.length < 2 ? `${name}${name}` : name,
+							},
+							{ truncate: true },
+						),
+					};
+				},
+			},
+			update: {
+				before: async (data) => ({
+					data: cleanProfile(data, { truncate: false }),
 				}),
 			},
 		},
 	},
 	account: {
+		// Discord's access/refresh tokens are stored even though we never call
+		// its API: keep them encrypted (AES-256-GCM with the auth secret).
+		encryptOAuthTokens: true,
 		accountLinking: {
 			enabled: true,
 			// Discord links to an account with the same email only when Discord
@@ -140,15 +204,16 @@ export const auth = betterAuth({
 			// another person's account.
 		},
 	},
-	// Vercel production and previews, plus BETTER_AUTH_URL (always trusted).
+	// BETTER_AUTH_URL is always trusted; add the public site and this deployment.
 	trustedOrigins: [
-		"https://*.vercel.app",
+		...vercelOrigins,
 		...(process.env.VITE_SITE_URL ? [process.env.VITE_SITE_URL] : []),
 	],
 	rateLimit: {
 		enabled: true,
 		// Serverless instances don't share memory.
 		storage: "database",
+		// Keys are paths relative to basePath (/api/auth), as Better Auth matches them.
 		customRules: {
 			"/sign-in/anonymous": { window: 60, max: 10 },
 			"/sign-in/email": { window: 60, max: 5 },
@@ -156,6 +221,9 @@ export const auth = betterAuth({
 			"/sign-in/email-otp": { window: 60, max: 5 },
 			"/email-otp/send-verification-otp": { window: 60, max: 3 },
 			"/request-password-reset": { window: 60, max: 3 },
+			"/reset-password": { window: 60, max: 5 },
+			"/update-user": { window: 60, max: 20 },
+			"/delete-user": { window: 60, max: 3 },
 		},
 	},
 	session: {
@@ -167,7 +235,10 @@ export const auth = betterAuth({
 	advanced: {
 		cookiePrefix: "color-memory",
 		ipAddress: {
-			ipAddressHeaders: ["x-forwarded-for", "x-real-ip"],
+			// Vercel sets both to the client IP and overwrites whatever the
+			// client sent. Without trustedProxies Better Auth only trusts
+			// single-value headers, so the single-value x-real-ip goes first.
+			ipAddressHeaders: ["x-real-ip", "x-forwarded-for"],
 		},
 		backgroundTasks: { handler: sendInBackground },
 	},
