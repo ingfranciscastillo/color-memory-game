@@ -230,5 +230,6 @@
 	"collection_title": "Your sample deck",
 	"collection_count": "Colors nailed: {count}",
 	"collection_empty": "Nail a color with 90 or more and it will show up here.",
-	"collection_more": "Show more"
+	"collection_more": "Show more",
+	"settings_sound": "Sound"
 }

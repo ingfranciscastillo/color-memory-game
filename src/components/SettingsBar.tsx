@@ -1,5 +1,6 @@
 import { useHydrated } from "@tanstack/react-router";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useSound } from "@/hooks/useSound";
 import { useTheme } from "@/hooks/useTheme";
 import { LOCALE_NAMES } from "@/lib/i18n";
 import { DARK } from "@/lib/theme";
@@ -10,6 +11,7 @@ import { getLocale, locales, setLocale } from "@/paraglide/runtime.js";
 export function SettingsBar() {
 	const { theme, toggleTheme } = useTheme();
 	const { reduced, toggleReducedMotion } = useReducedMotion();
+	const sound = useSound();
 	// The server can't know the saved preferences: show switch state after hydration.
 	const hydrated = useHydrated();
 	const locale = getLocale();
@@ -24,6 +26,11 @@ export function SettingsBar() {
 			label: m.settings_reduce_motion(),
 			on: hydrated && reduced,
 			toggle: toggleReducedMotion,
+		},
+		{
+			label: m.settings_sound(),
+			on: hydrated && sound.on,
+			toggle: sound.toggle,
 		},
 	];
 

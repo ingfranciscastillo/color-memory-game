@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { modeDescription, modeLabel } from "@/lib/i18n";
 import { type GameMode, MODE_COLORS, MODES } from "@/lib/modes";
 import { isMotionReduced } from "@/lib/motion";
+import { playSound } from "@/lib/sound";
 import { m } from "@/paraglide/messages.js";
 import { DeckCard } from "./DeckCard";
 
@@ -58,7 +59,10 @@ export function ModeFan({ value, onChange, meta = {} }: ModeFanProps) {
 				if (Math.abs(delta) < DRAG_STEP) return;
 				// Dragging left brings the cards on the right forward.
 				const next = index + (delta < 0 ? 1 : -1);
-				if (next >= 0 && next < MODES.length) onChange(MODES[next]);
+				if (next >= 0 && next < MODES.length) {
+					onChange(MODES[next]);
+					playSound("tap");
+				}
 				drag.current = event.clientX;
 			}}
 			onPointerUp={() => {
@@ -96,7 +100,10 @@ export function ModeFan({ value, onChange, meta = {} }: ModeFanProps) {
 							name="mode"
 							value={mode}
 							checked={selected}
-							onChange={() => onChange(mode)}
+							onChange={() => {
+								onChange(mode);
+								playSound("tap");
+							}}
 							className="sr-only"
 						/>
 						<DeckCard

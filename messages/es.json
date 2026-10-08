@@ -230,5 +230,6 @@
 	"collection_title": "Tu muestrario",
 	"collection_count": "Colores clavados: {count}",
 	"collection_empty": "Clava un color con 90 o más y aparecerá aquí.",
-	"collection_more": "Ver más"
+	"collection_more": "Ver más",
+	"settings_sound": "Sonido"
 }

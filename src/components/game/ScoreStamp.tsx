@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { playSound } from "@/lib/sound";
 import { EXCELLENT_SCORE } from "@/lib/stats";
 import { m } from "@/paraglide/messages.js";
 
@@ -25,6 +26,18 @@ export function ScoreStamp({
 }) {
 	const nailed = score >= EXCELLENT_SCORE;
 	const pieces = useMemo(() => (nailed ? CONFETTI : []), [nailed]);
+
+	// The thud lands with the stamp; a nailed round adds a short chord.
+	useEffect(() => {
+		const thud = setTimeout(() => playSound("stamp"), delayMs + 200);
+		const chord = nailed
+			? setTimeout(() => playSound("nailed"), delayMs + 320)
+			: undefined;
+		return () => {
+			clearTimeout(thud);
+			clearTimeout(chord);
+		};
+	}, [delayMs, nailed]);
 
 	return (
 		<div className="relative">
