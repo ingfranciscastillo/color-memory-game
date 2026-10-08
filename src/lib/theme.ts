@@ -13,8 +13,8 @@ export type Theme = typeof LIGHT | typeof DARK;
 
 /** Browser UI color for each theme — matches `--background` in styles.css. */
 export const THEME_COLORS: Readonly<Record<Theme, string>> = {
-	[LIGHT]: "#FFFFFF",
-	[DARK]: "#020618",
+	[LIGHT]: "#F4F3EF",
+	[DARK]: "#1C1B19",
 };
 
 export function systemTheme(): Theme {

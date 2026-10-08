@@ -20,6 +20,19 @@ export const MODES: GameMode[] = [
 	"endless",
 ];
 
+/**
+ * Identity colors per mode (match `--mode-*` in styles.css). The daily one
+ * is the four others plus honey. Decoration only: never a target color and
+ * never under text.
+ */
+export const MODE_COLORS: Record<GameMode, readonly string[]> = {
+	daily: ["#f2c14e", "#e4572e", "#3f88c5", "#5fad56", "#8e5ccf"],
+	classic: ["#e4572e"],
+	speed: ["#3f88c5"],
+	precision: ["#5fad56"],
+	endless: ["#8e5ccf"],
+};
+
 /** A round at or above this score keeps the streak; below it is a miss. */
 export const PASS_SCORE = 50;
 /** Endless ends after this many misses. */
