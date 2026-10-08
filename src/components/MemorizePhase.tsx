@@ -1,4 +1,6 @@
-import { type HSL, hslToCss } from "@/lib/color";
+import { useEffect } from "react";
+import { type HSL, hslToCss, hslToHex } from "@/lib/color";
+import { currentTheme, setThemeColor, THEME_COLORS } from "@/lib/theme";
 
 export function MemorizePhase({
 	color,
@@ -11,6 +13,12 @@ export function MemorizePhase({
 	round: number;
 	totalRounds: number;
 }) {
+	// Tint the browser UI with the target too, so the color really fills the screen.
+	useEffect(() => {
+		setThemeColor(hslToHex(color));
+		return () => setThemeColor(THEME_COLORS[currentTheme()]);
+	}, [color]);
+
 	return (
 		<div
 			className="fixed inset-0 z-10 animate-fade-in"

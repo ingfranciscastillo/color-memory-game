@@ -2,7 +2,9 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import { THEME_COLORS, THEME_INIT_SCRIPT } from "@/lib/theme";
 import appCss from "../styles.css?url";
 
 const DEFAULT_TITLE = `${SITE_NAME} — A minimal color memory game`;
@@ -32,7 +34,7 @@ export const Route = createRootRoute({
 			},
 			{
 				name: "theme-color",
-				content: "#111827",
+				content: THEME_COLORS.light,
 			},
 			{
 				property: "og:type",
@@ -76,9 +78,16 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en">
+		// The inline script adds `.dark` / `.reduce-motion` to <html> before hydration.
+		<html lang="en" suppressHydrationWarning>
 			<head>
 				<HeadContent />
+				<script
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: fixed script built from our own constants.
+					dangerouslySetInnerHTML={{
+						__html: THEME_INIT_SCRIPT + MOTION_INIT_SCRIPT,
+					}}
+				/>
 			</head>
 			<body>
 				{children}

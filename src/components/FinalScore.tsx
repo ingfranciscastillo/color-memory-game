@@ -20,7 +20,7 @@ export function FinalScore({
 	] as const;
 
 	return (
-		<div className="animate-fade-in">
+		<div className="animate-rise-in">
 			<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
 				Final score
 			</p>

@@ -21,7 +21,7 @@ export function ResultPanel({
 	isLastRound: boolean;
 }) {
 	return (
-		<div className="animate-fade-in">
+		<div className="animate-rise-in">
 			<div className="grid grid-cols-2">
 				<div>
 					<div

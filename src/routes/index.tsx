@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { SettingsBar } from "@/components/SettingsBar";
 import {
 	type GameMode,
 	MODE_DESCRIPTIONS,
@@ -118,6 +119,10 @@ function Home() {
 				Best {(stats?.bestScore ?? 0).toLocaleString()}
 				{stats?.bestStreak ? ` · Streak ×${stats.bestStreak}` : ""}
 			</p>
+
+			<div className="mt-16 border-t border-border pt-6">
+				<SettingsBar />
+			</div>
 		</main>
 	);
 }

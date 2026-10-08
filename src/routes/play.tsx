@@ -75,7 +75,7 @@ function Play() {
 				)}
 
 				{game.phase === "recreate" && (
-					<div className="animate-fade-in">
+					<div className="animate-rise-in">
 						<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
 							Recreate the color
 						</p>
