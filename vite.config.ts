@@ -22,14 +22,9 @@ const config = defineConfig({
 			strategy: ["url", "cookie", "preferredLanguage", "baseLocale"],
 			// First match wins: specific routes before the wildcard.
 			urlPatterns: [
-				{
-					// Auth callbacks and other endpoints are never localized.
-					pattern: "/api/:path(.*)?",
-					localized: [
-						["en", "/api/:path(.*)?"],
-						["es", "/api/:path(.*)?"],
-					],
-				},
+				// /api has no pattern on purpose: the URL then says nothing about the
+				// locale, so emails and errors follow the cookie or Accept-Language.
+				// server.ts keeps those requests from being redirected.
 				{
 					pattern: "/",
 					localized: [
@@ -42,6 +37,20 @@ const config = defineConfig({
 					localized: [
 						["en", "/en/play"],
 						["es", "/es/jugar"],
+					],
+				},
+				{
+					pattern: "/profile",
+					localized: [
+						["en", "/en/profile"],
+						["es", "/es/perfil"],
+					],
+				},
+				{
+					pattern: "/reset-password",
+					localized: [
+						["en", "/en/reset-password"],
+						["es", "/es/restablecer"],
 					],
 				},
 				{

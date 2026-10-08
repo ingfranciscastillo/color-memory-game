@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { AccountButton } from "@/components/account/AccountButton";
 import { SettingsBar } from "@/components/SettingsBar";
 import {
 	formatNumber,
@@ -56,7 +57,10 @@ function Home() {
 	}, []);
 
 	return (
-		<main className="mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16 sm:px-10">
+		<main className="relative mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16 sm:px-10">
+			<div className="absolute top-10 right-6 sm:top-16 sm:right-10">
+				<AccountButton />
+			</div>
 			<h1 className="text-4xl font-light uppercase tracking-[0.2em] sm:text-6xl">
 				Color
 				<br />

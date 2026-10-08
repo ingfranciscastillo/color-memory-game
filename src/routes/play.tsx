@@ -1,11 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { ColorPicker } from "@/components/ColorPicker";
 import { FinalScore } from "@/components/FinalScore";
 import { MemorizePhase } from "@/components/MemorizePhase";
+import { PageHeader } from "@/components/PageHeader";
 import { ResultPanel } from "@/components/ResultPanel";
 import { localizedHead, modeLabel } from "@/lib/i18n";
 import { type GameMode, isGameMode } from "@/lib/modes";
-import { SITE_NAME } from "@/lib/seo";
 import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
 import { m } from "@/paraglide/messages.js";
 
@@ -39,20 +39,14 @@ function Play() {
 
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
-			<header className="flex items-baseline justify-between">
-				<Link
-					to="/"
-					className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
-				>
-					{SITE_NAME}
-				</Link>
+			<PageHeader>
 				<span className="text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums">
 					{modeLabel(mode)}
 					{isEndless && game.phase !== "final"
 						? ` · ${m.streak({ count: game.streak })}`
 						: ""}
 				</span>
-			</header>
+			</PageHeader>
 
 			<div className="mt-16">
 				{game.phase === "memorize" && game.target && (

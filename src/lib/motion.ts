@@ -43,5 +43,11 @@ export function applyReducedMotion(reduced: boolean) {
 	document.documentElement.classList.toggle(REDUCE_MOTION_CLASS, reduced);
 }
 
+/** Are animations reduced right now? Reads the class already applied. */
+export function isMotionReduced(): boolean {
+	if (typeof document === "undefined") return false;
+	return document.documentElement.classList.contains(REDUCE_MOTION_CLASS);
+}
+
 /** Inline <head> script: applies the preference before first paint. */
 export const MOTION_INIT_SCRIPT = `(function(){try{var m=localStorage.getItem(${JSON.stringify(MOTION_KEY)});var r=m===${JSON.stringify(REDUCED)}?true:m===${JSON.stringify(FULL)}?false:!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);document.documentElement.classList.toggle(${JSON.stringify(REDUCE_MOTION_CLASS)},r);}catch(e){}})();`;
