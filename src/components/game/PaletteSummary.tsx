@@ -101,7 +101,7 @@ export function PaletteSummary({
 				{rounds.map((round, i) => (
 					<li
 						key={round.index}
-						className="flex animate-rise-in items-center gap-3 rounded-xl bg-card p-2 shadow-[var(--shadow-card)]"
+						className="flex animate-rise-in items-center gap-3 rounded-xl bg-card p-2 shadow-(--shadow-card)"
 						style={{
 							animationDelay: `${Math.min(i, STAGGERED_ROWS) * ROW_STAGGER_MS}ms`,
 						}}
@@ -132,13 +132,13 @@ export function PaletteSummary({
 			</ol>
 
 			<dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
-				<div className="rounded-lg bg-card px-3 py-2 shadow-[var(--shadow-card)]">
+				<div className="rounded-lg bg-card px-3 py-2 shadow-(--shadow-card)">
 					<dt className="text-xs text-ink-muted">{m.final_best_round()}</dt>
 					<dd className="font-semibold tabular-nums">
 						{formatNumber(bestRound)}
 					</dd>
 				</div>
-				<div className="rounded-lg bg-card px-3 py-2 shadow-[var(--shadow-card)]">
+				<div className="rounded-lg bg-card px-3 py-2 shadow-(--shadow-card)">
 					<dt className="text-xs text-ink-muted">{m.final_max_streak()}</dt>
 					<dd className="font-semibold tabular-nums">
 						×{formatNumber(maxStreak)}

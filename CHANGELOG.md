@@ -5,6 +5,20 @@ What's new in Color Memory, for players. This file is generated with
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 1.6 - 2026-10-08
+
+### Added
+
+- A whole new look: modes are a painter's sample deck, and every color is a paint chip you memorize, fill and compare.
+- Every color has its own invented name, the same for everyone.
+- Share your daily palette without spoiling the colors.
+- Your sample deck: every color you nail with 90 or more, in your profile.
+- Optional sounds for cards and the score stamp.
+
+### Changed
+
+- Colors are shown and compared on a neutral gray, the same in light and dark mode, so they look the same to everyone.
+
 ## 1.5 - 2026-10-08
 
 ### Added

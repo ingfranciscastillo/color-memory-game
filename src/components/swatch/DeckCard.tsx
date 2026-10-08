@@ -24,7 +24,7 @@ export function DeckCard({
 			className={`relative flex h-full w-full flex-col rounded-xl bg-card p-2 text-left text-ink transition-shadow duration-200 ${
 				selected
 					? "shadow-[0_0_0_2px_var(--ink),var(--shadow-card-lifted)]"
-					: "shadow-[var(--shadow-card)]"
+					: "shadow-(--shadow-card)"
 			}`}
 		>
 			<span className="flex h-[58%] flex-col overflow-hidden rounded-lg">

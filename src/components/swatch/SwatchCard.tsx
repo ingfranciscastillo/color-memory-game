@@ -55,7 +55,7 @@ export function SwatchCard({
 	const s = SIZES[size];
 	return (
 		<figure
-			className={`bg-card text-ink shadow-[var(--shadow-card)] ${s.card} ${className}`}
+			className={`bg-card text-ink shadow-(--shadow-card) ${s.card} ${className}`}
 			style={{ viewTransitionName, ...style }}
 		>
 			<div

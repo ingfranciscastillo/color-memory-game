@@ -26,6 +26,54 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
 	{
+		version: "1.6",
+		date: "2026-10-08",
+		changes: [
+			{
+				kind: "added",
+				text: {
+					en: "A whole new look: modes are a painter's sample deck, and every color is a paint chip you memorize, fill and compare.",
+					es: "Un aspecto totalmente nuevo: los modos son un muestrario de pintor y cada color es una muestra que memorizas, rellenas y comparas.",
+				},
+			},
+			{
+				kind: "added",
+				text: {
+					en: "Every color has its own invented name, the same for everyone.",
+					es: "Cada color tiene su propio nombre inventado, el mismo para todos.",
+				},
+			},
+			{
+				kind: "added",
+				text: {
+					en: "Share your daily palette without spoiling the colors.",
+					es: "Comparte tu paleta del diario sin desvelar los colores.",
+				},
+			},
+			{
+				kind: "added",
+				text: {
+					en: "Your sample deck: every color you nail with 90 or more, in your profile.",
+					es: "Tu muestrario: cada color que clavas con 90 o más, en tu perfil.",
+				},
+			},
+			{
+				kind: "added",
+				text: {
+					en: "Optional sounds for cards and the score stamp.",
+					es: "Sonidos opcionales para las cartas y el sello de puntuación.",
+				},
+			},
+			{
+				kind: "improved",
+				text: {
+					en: "Colors are shown and compared on a neutral gray, the same in light and dark mode, so they look the same to everyone.",
+					es: "Los colores se muestran y comparan sobre un gris neutro, igual en modo claro y oscuro, para que todos los vean igual.",
+				},
+			},
+		],
+	},
+	{
 		version: "1.5",
 		date: "2026-10-08",
 		changes: [

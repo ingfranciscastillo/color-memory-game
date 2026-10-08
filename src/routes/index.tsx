@@ -113,7 +113,7 @@ function Home() {
 					{tiles.map(([label, value]) => (
 						<div
 							key={label}
-							className="rounded-lg bg-card px-3 py-3 shadow-[var(--shadow-card)]"
+							className="rounded-lg bg-card px-3 py-3 shadow-(--shadow-card)"
 						>
 							<dt className="text-[0.7rem] text-ink-muted">{label}</dt>
 							<dd className="mt-1 text-xl font-semibold tabular-nums">
