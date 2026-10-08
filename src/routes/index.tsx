@@ -1,16 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { AccountButton } from "@/components/account/AccountButton";
+import { PageHeader } from "@/components/PageHeader";
 import { SettingsBar } from "@/components/SettingsBar";
+import { ModeFan } from "@/components/swatch/ModeFan";
 import { LATEST_RELEASE } from "@/content/changelog";
 import { authClient } from "@/lib/auth-client";
-import {
-	formatNumber,
-	localizedHead,
-	modeDescription,
-	modeLabel,
-} from "@/lib/i18n";
-import { type GameMode, MODES } from "@/lib/modes";
+import { formatNumber, localizedHead, modeLabel } from "@/lib/i18n";
+import type { GameMode } from "@/lib/modes";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
@@ -69,91 +65,83 @@ function Home() {
 		};
 	}, [userId]);
 
-	const summaryParts = summary
+	const dailyMeta = !summary
+		? m.mode_meta_today()
+		: summary.dailyPlayedToday
+			? m.mode_meta_done()
+			: summary.dailyStreak
+				? m.mode_meta_streak({ count: summary.dailyStreak })
+				: m.mode_meta_today();
+
+	const tiles = summary
 		? [
-				m.home_best({ score: formatNumber(summary.bestScore) }),
-				summary.bestStreak ? m.streak({ count: summary.bestStreak }) : null,
-				summary.dailyStreak
-					? m.home_daily_streak({ count: summary.dailyStreak })
-					: null,
-				summary.dailyPlayedToday ? m.home_daily_done() : null,
-			].filter(Boolean)
+				[m.home_tile_best(), formatNumber(summary.bestScore)],
+				[m.home_tile_streak(), `×${formatNumber(summary.bestStreak)}`],
+				[m.home_tile_daily(), `×${formatNumber(summary.dailyStreak)}`],
+			]
 		: [];
 
-	return (
-		<main className="relative mx-auto flex min-h-screen max-w-2xl flex-col justify-center px-6 py-16 sm:px-10">
-			<div className="absolute top-10 right-6 sm:top-16 sm:right-10">
-				<AccountButton />
-			</div>
-			<h1 className="text-4xl font-light uppercase tracking-[0.2em] sm:text-6xl">
-				Color
-				<br />
-				Memory
-			</h1>
-			<p className="mt-6 max-w-sm text-sm text-muted-foreground sm:text-base">
-				{m.home_tagline()}
-			</p>
+	const link =
+		"underline-offset-4 transition-colors hover:text-ink hover:underline";
 
-			<div className="mt-14">
-				<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-					{m.home_mode()}
-				</p>
-				<ul className="mt-4 divide-y divide-border border-y border-border">
-					{MODES.map((option) => (
-						<li key={option}>
-							<button
-								type="button"
-								onClick={() => setMode(option)}
-								aria-pressed={mode === option}
-								className={`flex w-full items-baseline justify-between gap-6 py-4 text-left transition-opacity ${
-									mode === option ? "" : "opacity-45 hover:opacity-80"
-								}`}
-							>
-								<span className="text-sm uppercase tracking-[0.2em]">
-									{modeLabel(option)}
-								</span>
-								<span className="text-right text-xs text-muted-foreground">
-									{modeDescription(option)}
-								</span>
-							</button>
-						</li>
-					))}
-				</ul>
+	return (
+		<main className="mx-auto flex min-h-screen max-w-2xl flex-col overflow-x-clip px-6 py-8 sm:px-10 sm:py-12">
+			<PageHeader />
+
+			<div className="mt-14 text-center">
+				<h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+					{m.home_greeting()}
+				</h1>
+				<p className="mt-3 text-ink-muted">{m.home_greeting_hint()}</p>
+			</div>
+
+			<div className="mt-10">
+				<ModeFan value={mode} onChange={setMode} meta={{ daily: dailyMeta }} />
 			</div>
 
 			<Link
 				to="/play"
 				search={{ mode }}
-				className="mt-12 self-start bg-foreground px-12 py-5 text-xs uppercase tracking-[0.4em] text-background transition-opacity hover:opacity-80"
+				viewTransition
+				className="mx-auto mt-8 w-full max-w-sm rounded-xl bg-ink px-8 py-4 text-center font-semibold text-paper transition-opacity hover:opacity-85"
 			>
-				{m.home_play()}
+				{m.home_play_mode({ mode: modeLabel(mode) })}
 			</Link>
 
-			<div className="mt-10 flex flex-wrap items-baseline gap-x-8 gap-y-3 text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums">
-				{summaryParts.length > 0 && <p>{summaryParts.join(" · ")}</p>}
-				<Link
-					to="/stats"
-					className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
-				>
+			{tiles.length > 0 && (
+				<dl className="mx-auto mt-10 grid w-full max-w-sm grid-cols-3 gap-3">
+					{tiles.map(([label, value]) => (
+						<div
+							key={label}
+							className="rounded-lg bg-card px-3 py-3 shadow-[var(--shadow-card)]"
+						>
+							<dt className="text-[0.7rem] text-ink-muted">{label}</dt>
+							<dd className="mt-1 text-xl font-semibold tabular-nums">
+								{value}
+							</dd>
+						</div>
+					))}
+				</dl>
+			)}
+
+			<nav className="mx-auto mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-muted">
+				<Link to="/stats" className={link}>
 					{m.stats_link()}
 				</Link>
-				<Link
-					to="/leaderboard"
-					className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
-				>
+				<Link to="/leaderboard" className={link}>
 					{m.leaderboard_link()}
 				</Link>
-			</div>
-
-			<div className="mt-16 border-t border-border pt-6">
-				<SettingsBar />
 				<Link
 					to="/changelog"
 					aria-label={m.changelog_link({ version: LATEST_RELEASE.version })}
-					className="mt-6 inline-block text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums underline-offset-4 transition-colors hover:text-foreground hover:underline"
+					className={`${link} tabular-nums`}
 				>
 					v{LATEST_RELEASE.version}
 				</Link>
+			</nav>
+
+			<div className="mt-auto border-t border-border pt-6">
+				<SettingsBar />
 			</div>
 		</main>
 	);

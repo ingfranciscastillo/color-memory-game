@@ -208,5 +208,15 @@
 	"changelog_link": "What's new in version {version}",
 	"change_added": "New",
 	"change_improved": "Better",
-	"change_fixed": "Fixed"
+	"change_fixed": "Fixed",
+	"home_greeting": "Do you remember this color?",
+	"home_greeting_hint": "Pick a mode from the deck.",
+	"home_modes": "Game mode",
+	"home_play_mode": "Play · {mode}",
+	"home_tile_best": "Best",
+	"home_tile_streak": "Best streak",
+	"home_tile_daily": "Daily streak",
+	"mode_meta_today": "Today",
+	"mode_meta_streak": "Today · streak ×{count}",
+	"mode_meta_done": "Done today"
 }

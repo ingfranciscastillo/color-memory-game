@@ -6,11 +6,6 @@ import { DARK } from "@/lib/theme";
 import { m } from "@/paraglide/messages.js";
 import { getLocale, locales, setLocale } from "@/paraglide/runtime.js";
 
-const itemClass = (on: boolean) =>
-	`flex items-center gap-2 text-xs uppercase tracking-[0.3em] transition-opacity ${
-		on ? "" : "opacity-45 hover:opacity-80"
-	}`;
-
 /** Theme, motion and language settings. */
 export function SettingsBar() {
 	const { theme, toggleTheme } = useTheme();
@@ -33,8 +28,8 @@ export function SettingsBar() {
 	];
 
 	return (
-		<div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-			<div className="flex flex-wrap gap-x-8 gap-y-3">
+		<div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4 text-sm">
+			<div className="flex flex-wrap gap-x-6 gap-y-3">
 				{switches.map(({ label, on, toggle }) => (
 					<button
 						key={label}
@@ -42,20 +37,27 @@ export function SettingsBar() {
 						role="switch"
 						aria-checked={on}
 						onClick={toggle}
-						className={itemClass(on)}
+						className="flex items-center gap-2.5 text-ink-muted transition-colors hover:text-ink aria-checked:text-ink"
 					>
+						{/* A small toggle: track with a sliding knob. */}
 						<span
 							aria-hidden="true"
-							className={`size-2 rounded-full border border-current transition-colors ${
-								on ? "bg-current" : ""
+							className={`relative h-5 w-9 rounded-full transition-colors ${
+								on ? "bg-ink" : "bg-input"
 							}`}
-						/>
+						>
+							<span
+								className={`absolute top-0.5 left-0.5 size-4 rounded-full bg-card shadow-sm transition-transform duration-150 ${
+									on ? "translate-x-4" : ""
+								}`}
+							/>
+						</span>
 						{label}
 					</button>
 				))}
 			</div>
 
-			<fieldset className="flex gap-4">
+			<fieldset className="flex rounded-lg bg-muted p-0.5">
 				<legend className="sr-only">{m.settings_language()}</legend>
 				{locales.map((l) => (
 					<button
@@ -66,7 +68,11 @@ export function SettingsBar() {
 						aria-label={LOCALE_NAMES[l]}
 						// Loads the same page in the other language and remembers the choice.
 						onClick={() => l !== locale && setLocale(l)}
-						className={itemClass(l === locale)}
+						className={`rounded-md px-3 py-1 text-xs font-semibold uppercase transition-colors ${
+							l === locale
+								? "bg-card text-ink shadow-sm"
+								: "text-ink-muted hover:text-ink"
+						}`}
 					>
 						{l}
 					</button>

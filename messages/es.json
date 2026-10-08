@@ -208,5 +208,15 @@
 	"changelog_link": "Novedades de la versión {version}",
 	"change_added": "Nuevo",
 	"change_improved": "Mejora",
-	"change_fixed": "Arreglo"
+	"change_fixed": "Arreglo",
+	"home_greeting": "¿Recuerdas este color?",
+	"home_greeting_hint": "Elige un modo del muestrario.",
+	"home_modes": "Modo de juego",
+	"home_play_mode": "Jugar · {mode}",
+	"home_tile_best": "Récord",
+	"home_tile_streak": "Mejor racha",
+	"home_tile_daily": "Racha diaria",
+	"mode_meta_today": "Hoy",
+	"mode_meta_streak": "Hoy · racha ×{count}",
+	"mode_meta_done": "Hecho hoy"
 }
