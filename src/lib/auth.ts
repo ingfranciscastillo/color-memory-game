@@ -10,6 +10,7 @@ import { db } from "@/db";
 import * as authSchema from "@/db/auth-schema";
 import { m } from "@/paraglide/messages.js";
 import { localizeHref } from "@/paraglide/runtime.js";
+import { moveGames } from "@/server/account-link";
 import { sendEmail } from "@/server/email";
 
 /**
@@ -19,6 +20,7 @@ import { sendEmail } from "@/server/email";
  *   session cookie: the server identifies the player by the session, never
  *   by anything the client sends.
  * - Optional account with Discord, an email code, or email and password.
+ *   Signing in moves the anonymous player's games to the account.
  * - Discord is only enabled when its credentials exist.
  * - Emails go out in the player's language: the Paraglide middleware scopes
  *   the locale to each request (cookie, then Accept-Language).
@@ -259,8 +261,13 @@ export const auth = betterAuth({
 					}),
 				]
 			: []),
-		// Moving anonymous games to the account on link comes with server games.
-		anonymous({ emailDomainName: "anon.color-memory.local" }),
+		anonymous({
+			emailDomainName: "anon.color-memory.local",
+			// The anonymous player's games move to the account they sign in to.
+			onLinkAccount: async ({ anonymousUser, newUser }) => {
+				await moveGames(anonymousUser.user.id, newUser.user.id);
+			},
+		}),
 		emailOTP({
 			otpLength: 6,
 			expiresIn: 60 * 10,

@@ -8,12 +8,15 @@ export function FinalScore({
 	maxStreak,
 	roundsPlayed,
 	onPlayAgain,
+	note,
 }: {
 	totalScore: number;
 	bestRound: number;
 	maxStreak: number;
 	roundsPlayed: number;
-	onPlayAgain: () => void;
+	/** Absent when the mode can't be replayed (the daily challenge). */
+	onPlayAgain?: () => void;
+	note?: string;
 }) {
 	const rows = [
 		[m.final_best_round(), formatNumber(bestRound)],
@@ -30,6 +33,8 @@ export function FinalScore({
 				{formatNumber(totalScore)}
 			</p>
 
+			{note && <p className="mt-6 text-sm text-muted-foreground">{note}</p>}
+
 			<dl className="mt-14 divide-y divide-border border-y border-border">
 				{rows.map(([label, value]) => (
 					<div key={label} className="flex items-baseline justify-between py-4">
@@ -42,13 +47,15 @@ export function FinalScore({
 			</dl>
 
 			<div className="mt-12 flex items-center gap-8">
-				<button
-					type="button"
-					onClick={onPlayAgain}
-					className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
-				>
-					{m.final_play_again()}
-				</button>
+				{onPlayAgain && (
+					<button
+						type="button"
+						onClick={onPlayAgain}
+						className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
+					>
+						{m.final_play_again()}
+					</button>
+				)}
 				<Link
 					to="/"
 					className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"

@@ -1,6 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "tanstack-start",
+  "regions": ["cle1"],
+  "crons": [
+    {
+      "path": "/api/cron/cleanup",
+      "schedule": "0 5 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

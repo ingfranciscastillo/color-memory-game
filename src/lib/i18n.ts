@@ -22,6 +22,7 @@ const OG_LOCALES: Record<Locale, string> = {
 
 export function modeLabel(mode: GameMode) {
 	return {
+		daily: m.mode_daily,
 		classic: m.mode_classic,
 		speed: m.mode_speed,
 		precision: m.mode_precision,
@@ -31,6 +32,7 @@ export function modeLabel(mode: GameMode) {
 
 export function modeDescription(mode: GameMode) {
 	return {
+		daily: m.mode_daily_description,
 		classic: m.mode_classic_description,
 		speed: m.mode_speed_description,
 		precision: m.mode_precision_description,

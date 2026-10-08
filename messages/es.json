@@ -50,7 +50,7 @@
 	"auth_title": "Entrar en Color Memory",
 	"auth_title_sign_up": "Crear cuenta",
 	"auth_title_forgot": "Otra contraseña",
-	"auth_intro": "Guarda tus puntuaciones y rachas en cualquier dispositivo.",
+	"auth_intro": "Guarda tus puntuaciones y rachas en cualquier dispositivo. Las partidas que ya has jugado pasan a tu cuenta.",
 	"auth_discord": "Continuar con Discord",
 	"auth_or_email": "o con tu email",
 	"auth_email": "Email",
@@ -129,5 +129,14 @@
 	"email_code_subject": "Tu código de Color Memory",
 	"email_code_line1": "Escribe este código en Color Memory. Caduca en 10 minutos.",
 	"profile_delete_reauth": "Para borrar la cuenta, vuelve a entrar y repite la acción.",
-	"profile_name_hint": "De 2 a 24 caracteres."
+	"profile_name_hint": "De 2 a 24 caracteres.",
+	"mode_daily": "Diario",
+	"mode_daily_description": "Cinco colores, los mismos para todos. Una vez al día.",
+	"daily_done": "Ese era el reto de hoy. Mañana, colores nuevos.",
+	"loading": "Cargando…",
+	"retry": "Reintentar",
+	"error_no_session": "Necesitas una sesión para jugar. Recarga la página.",
+	"error_invalid_game": "Esta partida ya no está disponible.",
+	"error_too_many": "Demasiadas peticiones. Espera un momento.",
+	"error_network": "No se pudo conectar con el servidor. Revisa tu conexión."
 }

@@ -12,6 +12,7 @@ export function ResultPanel({
 	onFinish,
 	isEndless,
 	isLastRound,
+	busy,
 }: {
 	target: HSL;
 	guess: HSL;
@@ -21,6 +22,7 @@ export function ResultPanel({
 	onFinish: () => void;
 	isEndless: boolean;
 	isLastRound: boolean;
+	busy: boolean;
 }) {
 	return (
 		<div className="animate-rise-in">
@@ -89,7 +91,9 @@ export function ResultPanel({
 				<button
 					type="button"
 					onClick={onNext}
-					className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
+					disabled={busy}
+					aria-busy={busy}
+					className="bg-foreground disabled:opacity-60 px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
 				>
 					{isLastRound ? m.result_finish() : m.result_next()}
 				</button>
@@ -97,7 +101,8 @@ export function ResultPanel({
 					<button
 						type="button"
 						onClick={onFinish}
-						className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
+						disabled={busy}
+						className="disabled:opacity-45 text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
 					>
 						{m.result_end_session()}
 					</button>

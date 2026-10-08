@@ -35,7 +35,6 @@ function Play() {
 	const { mode } = Route.useSearch();
 	const game = useColorMemoryGame(mode);
 	const isEndless = mode === "endless";
-	const isLastRound = !isEndless && game.roundIndex + 1 >= game.totalRounds;
 
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
@@ -49,6 +48,15 @@ function Play() {
 			</PageHeader>
 
 			<div className="mt-16">
+				{game.phase === "loading" && (
+					<p
+						role="status"
+						className="animate-fade-in text-xs uppercase tracking-[0.3em] text-muted-foreground"
+					>
+						{m.loading()}
+					</p>
+				)}
+
 				{game.phase === "memorize" && game.target && (
 					<MemorizePhase
 						color={game.target}
@@ -69,23 +77,26 @@ function Play() {
 						<button
 							type="button"
 							onClick={game.check}
-							className="mt-10 w-full bg-foreground px-10 py-5 text-xs uppercase tracking-[0.4em] text-background transition-opacity hover:opacity-80 sm:w-auto"
+							disabled={game.busy}
+							aria-busy={game.busy}
+							className="mt-10 w-full bg-foreground px-10 py-5 text-xs uppercase tracking-[0.4em] text-background transition-opacity hover:opacity-80 disabled:opacity-60 sm:w-auto"
 						>
 							{m.check()}
 						</button>
 					</div>
 				)}
 
-				{game.phase === "result" && game.target && game.result && (
+				{game.phase === "result" && game.result && (
 					<ResultPanel
-						target={game.target}
-						guess={game.guess}
-						result={game.result}
+						target={game.result.target}
+						guess={game.result.guess}
+						result={game.result.result}
 						streak={game.streak}
 						onNext={game.next}
 						onFinish={game.finish}
 						isEndless={isEndless}
-						isLastRound={isLastRound}
+						isLastRound={game.result.finished}
+						busy={game.busy}
 					/>
 				)}
 
@@ -95,8 +106,23 @@ function Play() {
 						bestRound={game.bestRound}
 						maxStreak={game.maxStreak}
 						roundsPlayed={game.roundsPlayed}
-						onPlayAgain={game.reset}
+						onPlayAgain={mode === "daily" ? undefined : game.reset}
+						note={mode === "daily" ? m.daily_done() : undefined}
 					/>
+				)}
+
+				{game.error && (
+					<div role="alert" className="mt-10 animate-rise-in space-y-4">
+						<p className="text-sm text-destructive">{game.error}</p>
+						<button
+							type="button"
+							onClick={game.retry}
+							disabled={game.busy}
+							className="text-xs uppercase tracking-[0.3em] underline-offset-4 hover:underline disabled:opacity-45"
+						>
+							{m.retry()}
+						</button>
+					</div>
 				)}
 			</div>
 		</main>

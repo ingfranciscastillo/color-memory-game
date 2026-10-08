@@ -50,7 +50,7 @@
 	"auth_title": "Sign in to Color Memory",
 	"auth_title_sign_up": "Create account",
 	"auth_title_forgot": "New password",
-	"auth_intro": "Keep your scores and streaks on any device.",
+	"auth_intro": "Keep your scores and streaks on any device. Games you've already played move to your account.",
 	"auth_discord": "Continue with Discord",
 	"auth_or_email": "or with your email",
 	"auth_email": "Email",
@@ -129,5 +129,14 @@
 	"email_code_subject": "Your Color Memory code",
 	"email_code_line1": "Enter this code in Color Memory. It expires in 10 minutes.",
 	"profile_delete_reauth": "To delete your account, sign in again and try once more.",
-	"profile_name_hint": "2 to 24 characters."
+	"profile_name_hint": "2 to 24 characters.",
+	"mode_daily": "Daily",
+	"mode_daily_description": "Five colors, the same for everyone. Once a day.",
+	"daily_done": "That was today's challenge. New colors tomorrow.",
+	"loading": "Loading…",
+	"retry": "Try again",
+	"error_no_session": "You need a session to play. Reload the page.",
+	"error_invalid_game": "This game is no longer available.",
+	"error_too_many": "Too many requests. Wait a moment.",
+	"error_network": "Couldn't reach the server. Check your connection."
 }
