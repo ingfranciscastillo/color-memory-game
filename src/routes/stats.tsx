@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useId, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { ScoreDistribution } from "@/components/stats/ScoreDistribution";
+import { CollectionGrid } from "@/components/swatch/CollectionGrid";
 import { authClient } from "@/lib/auth-client";
 import { formatNumber, modeLabel } from "@/lib/i18n";
 import { EXCELLENT_SCORE } from "@/lib/stats";
@@ -58,7 +59,7 @@ function StatsPage() {
 					{m.stats_empty()}
 				</p>
 			) : (
-				<StatsBody stats={stats} />
+				<StatsBody stats={stats} userId={userId ?? ""} />
 			)}
 		</main>
 	);
@@ -89,7 +90,7 @@ function Tiles({ items }: { items: [label: string, value: string][] }) {
 	);
 }
 
-function StatsBody({ stats }: { stats: PlayerStats }) {
+function StatsBody({ stats, userId }: { stats: PlayerStats; userId: string }) {
 	const distributionId = useId();
 	const dateFormat = new Intl.DateTimeFormat(getLocale(), {
 		day: "numeric",
@@ -224,6 +225,10 @@ function StatsBody({ stats }: { stats: PlayerStats }) {
 					<Channels channels={stats.channels} />
 				</Section>
 			)}
+
+			<Section title={m.collection_title()}>
+				<CollectionGrid userId={userId} />
+			</Section>
 
 			{stats.recent.length > 0 && (
 				<Section title={m.stats_recent()}>

@@ -3,6 +3,7 @@ import { useEffect, useId, useState } from "react";
 import { Avatar } from "@/components/Avatar";
 import { AuthDialog } from "@/components/account/AuthDialog";
 import { PageHeader } from "@/components/PageHeader";
+import { CollectionGrid } from "@/components/swatch/CollectionGrid";
 import { useAccount } from "@/hooks/useAccount";
 import { authClient } from "@/lib/auth-client";
 import { m } from "@/paraglide/messages.js";
@@ -221,6 +222,15 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 					</span>
 				</span>
 			</label>
+
+			<section aria-labelledby={`${ids}-collection`} className="mt-12">
+				<h2 id={`${ids}-collection`} className="text-lg font-semibold">
+					{m.collection_title()}
+				</h2>
+				<div className="mt-3">
+					<CollectionGrid userId={account.id} />
+				</div>
+			</section>
 
 			{error && (
 				<p role="alert" className="mt-6 text-sm text-destructive">

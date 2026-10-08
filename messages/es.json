@@ -226,5 +226,9 @@
 	"share_button": "Compartir paleta",
 	"share_copied": "¡Copiado! Pégalo donde quieras.",
 	"share_download": "Descargar imagen",
-	"share_failed": "No se pudo compartir. Prueba a descargar la imagen."
+	"share_failed": "No se pudo compartir. Prueba a descargar la imagen.",
+	"collection_title": "Tu muestrario",
+	"collection_count": "Colores clavados: {count}",
+	"collection_empty": "Clava un color con 90 o más y aparecerá aquí.",
+	"collection_more": "Ver más"
 }

@@ -226,5 +226,9 @@
 	"share_button": "Share palette",
 	"share_copied": "Copied! Paste it anywhere.",
 	"share_download": "Download image",
-	"share_failed": "Couldn't share. Try downloading the image."
+	"share_failed": "Couldn't share. Try downloading the image.",
+	"collection_title": "Your sample deck",
+	"collection_count": "Colors nailed: {count}",
+	"collection_empty": "Nail a color with 90 or more and it will show up here.",
+	"collection_more": "Show more"
 }
