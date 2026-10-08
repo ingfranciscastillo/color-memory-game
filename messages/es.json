@@ -1,0 +1,54 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"site_title": "Color Memory — Un juego minimalista de memoria de colores",
+	"site_description": "Mira un color. Memorízalo. Reconstrúyelo. Una prueba minimalista de memoria visual y percepción, puntuada en un espacio de color perceptual.",
+	"play_title": "Jugar — Color Memory",
+	"play_description": "Memoriza un color a pantalla completa, reconstrúyelo de memoria y descubre cuánto te has acercado.",
+	"play_og_description": "Memoriza un color, reconstrúyelo y pon a prueba tu percepción.",
+
+	"home_tagline": "¿Hasta qué punto recuerdas un color?",
+	"home_mode": "Modo",
+	"home_play": "Jugar",
+	"home_best": "Récord {score}",
+	"streak": "Racha ×{count}",
+
+	"mode_classic": "Clásico",
+	"mode_speed": "Velocidad",
+	"mode_precision": "Precisión",
+	"mode_endless": "Infinito",
+	"mode_classic_description": "Ocho rondas. Tres segundos cada una.",
+	"mode_speed_description": "El color desaparece más rápido en cada ronda.",
+	"mode_precision_description": "Tiempo fijo. Los colores cada vez se distinguen menos.",
+	"mode_endless_description": "Sigue hasta que pares… o falles demasiado.",
+
+	"settings_dark_mode": "Modo oscuro",
+	"settings_reduce_motion": "Reducir animaciones",
+	"settings_language": "Idioma",
+
+	"round": "Ronda {round}",
+	"round_of": "Ronda {round} / {total}",
+	"recreate_prompt": "Recrea el color",
+	"check": "Comprobar",
+
+	"picker_area": "Saturación y brillo",
+	"picker_area_value": "Saturación {saturation} %, brillo {brightness} %",
+	"picker_hue": "Tono",
+	"picker_preview": "Tu color actual",
+
+	"result_your_color": "Tu color",
+	"result_target": "Objetivo",
+	"result_difference": "{percent} de diferencia",
+	"result_hue": "Tono",
+	"result_saturation": "Saturación",
+	"result_lightness": "Luminosidad",
+	"result_next": "Siguiente",
+	"result_finish": "Terminar",
+	"result_end_session": "Terminar sesión",
+
+	"final_score": "Puntuación final",
+	"final_best_round": "Mejor ronda",
+	"final_max_streak": "Racha máxima",
+	"final_rounds_played": "Rondas jugadas",
+	"final_play_again": "Jugar otra vez",
+	"final_home": "Inicio"
+}

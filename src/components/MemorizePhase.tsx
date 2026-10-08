@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { type HSL, hslToCss, hslToHex } from "@/lib/color";
 import { currentTheme, setThemeColor, THEME_COLORS } from "@/lib/theme";
+import { m } from "@/paraglide/messages.js";
 
 export function MemorizePhase({
 	color,
@@ -26,8 +27,9 @@ export function MemorizePhase({
 		>
 			<div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6 sm:p-10">
 				<span className="text-xs uppercase tracking-[0.3em] mix-blend-difference text-white">
-					Round {round}
-					{Number.isFinite(totalRounds) ? ` / ${totalRounds}` : ""}
+					{Number.isFinite(totalRounds)
+						? m.round_of({ round, total: totalRounds })
+						: m.round({ round })}
 				</span>
 				<span className="font-mono text-sm tabular-nums mix-blend-difference text-white sm:text-base">
 					{remaining.toFixed(1)}s

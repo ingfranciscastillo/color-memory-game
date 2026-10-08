@@ -1,0 +1,54 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"site_title": "Color Memory — A minimal color memory game",
+	"site_description": "See a color. Memorize it. Rebuild it. A minimal test of visual memory and perception, scored in perceptual color space.",
+	"play_title": "Play — Color Memory",
+	"play_description": "Memorize a full-screen color, then rebuild it from memory and see how close you got.",
+	"play_og_description": "Memorize a color, rebuild it, and score your perception.",
+
+	"home_tagline": "How well can you remember a color?",
+	"home_mode": "Mode",
+	"home_play": "Play",
+	"home_best": "Best {score}",
+	"streak": "Streak ×{count}",
+
+	"mode_classic": "Classic",
+	"mode_speed": "Speed",
+	"mode_precision": "Precision",
+	"mode_endless": "Endless",
+	"mode_classic_description": "Eight rounds. Three seconds each.",
+	"mode_speed_description": "The color disappears faster every round.",
+	"mode_precision_description": "Steady time. Colors get harder to tell apart.",
+	"mode_endless_description": "Keep going until you stop — or miss too often.",
+
+	"settings_dark_mode": "Dark mode",
+	"settings_reduce_motion": "Reduce motion",
+	"settings_language": "Language",
+
+	"round": "Round {round}",
+	"round_of": "Round {round} / {total}",
+	"recreate_prompt": "Recreate the color",
+	"check": "Check",
+
+	"picker_area": "Saturation and brightness",
+	"picker_area_value": "Saturation {saturation}%, brightness {brightness}%",
+	"picker_hue": "Hue",
+	"picker_preview": "Your current color",
+
+	"result_your_color": "Your color",
+	"result_target": "Target",
+	"result_difference": "{percent} difference",
+	"result_hue": "Hue",
+	"result_saturation": "Saturation",
+	"result_lightness": "Lightness",
+	"result_next": "Next",
+	"result_finish": "Finish",
+	"result_end_session": "End session",
+
+	"final_score": "Final score",
+	"final_best_round": "Best round",
+	"final_max_streak": "Max streak",
+	"final_rounds_played": "Rounds played",
+	"final_play_again": "Play again",
+	"final_home": "Home"
+}

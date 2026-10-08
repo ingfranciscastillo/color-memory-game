@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import { type HSL, hslToCss } from "@/lib/color";
+import { m } from "@/paraglide/messages.js";
 
 type Props = {
 	value: HSL;
@@ -124,11 +125,14 @@ export function ColorPicker({ value, onChange }: Props) {
 						"linear-gradient(to top, #000, rgba(0,0,0,0)), linear-gradient(to right, #fff, rgba(255,255,255,0))",
 				}}
 				role="slider"
-				aria-label="Saturation and brightness"
+				aria-label={m.picker_area()}
 				aria-valuemin={0}
 				aria-valuemax={100}
 				aria-valuenow={Math.round(sv * 100)}
-				aria-valuetext={`Saturation ${Math.round(sv * 100)}%, brightness ${Math.round(v * 100)}%`}
+				aria-valuetext={m.picker_area_value({
+					saturation: Math.round(sv * 100),
+					brightness: Math.round(v * 100),
+				})}
 				tabIndex={0}
 			>
 				<span
@@ -148,7 +152,7 @@ export function ColorPicker({ value, onChange }: Props) {
 						"linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)",
 				}}
 				role="slider"
-				aria-label="Hue"
+				aria-label={m.picker_hue()}
 				aria-valuemin={0}
 				aria-valuemax={360}
 				aria-valuenow={Math.round(value.h)}
@@ -165,7 +169,7 @@ export function ColorPicker({ value, onChange }: Props) {
 				className="mt-6 h-24 w-full transition-colors duration-150"
 				style={{ backgroundColor: hslToCss(value) }}
 				role="img"
-				aria-label="Your current color"
+				aria-label={m.picker_preview()}
 			/>
 		</div>
 	);

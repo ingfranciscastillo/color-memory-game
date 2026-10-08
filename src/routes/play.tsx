@@ -3,41 +3,31 @@ import { ColorPicker } from "@/components/ColorPicker";
 import { FinalScore } from "@/components/FinalScore";
 import { MemorizePhase } from "@/components/MemorizePhase";
 import { ResultPanel } from "@/components/ResultPanel";
-import { type GameMode, isGameMode, MODE_LABELS } from "@/lib/modes";
-import { SITE_URL } from "@/lib/seo";
+import { localizedHead, modeLabel } from "@/lib/i18n";
+import { type GameMode, isGameMode } from "@/lib/modes";
+import { SITE_NAME } from "@/lib/seo";
 import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
+import { m } from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/play")({
 	validateSearch: (search: Record<string, unknown>): { mode: GameMode } => ({
 		mode: isGameMode(search.mode) ? (search.mode as GameMode) : "classic",
 	}),
-	head: () => ({
-		meta: [
-			{ title: "Play — Color Memory" },
-			{
-				name: "description",
-				content:
-					"Memorize a full-screen color, then rebuild it from memory and see how close you got.",
-			},
-			{ property: "og:title", content: "Play — Color Memory" },
-			{
-				property: "og:description",
-				content: "Memorize a color, rebuild it, and score your perception.",
-			},
-			{
-				property: "og:url",
-				content: `${SITE_URL}/play`,
-			},
-		],
-		links: [
-			{
-				// One canonical for all modes — the mode search param doesn't
-				// change indexable content, so it shouldn't fragment ranking signals.
-				rel: "canonical",
-				href: `${SITE_URL}/play`,
-			},
-		],
-	}),
+	head: () => {
+		const localized = localizedHead("/play");
+		return {
+			meta: [
+				{ title: m.play_title() },
+				{ name: "description", content: m.play_description() },
+				{ property: "og:title", content: m.play_title() },
+				{ property: "og:description", content: m.play_og_description() },
+				...localized.meta,
+			],
+			// One canonical per language for all modes — the mode search param
+			// doesn't change indexable content, so it shouldn't fragment ranking.
+			links: localized.links,
+		};
+	},
 	component: Play,
 });
 
@@ -54,12 +44,12 @@ function Play() {
 					to="/"
 					className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
 				>
-					Color Memory
+					{SITE_NAME}
 				</Link>
 				<span className="text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums">
-					{MODE_LABELS[mode]}
+					{modeLabel(mode)}
 					{isEndless && game.phase !== "final"
-						? ` · Streak ×${game.streak}`
+						? ` · ${m.streak({ count: game.streak })}`
 						: ""}
 				</span>
 			</header>
@@ -77,7 +67,7 @@ function Play() {
 				{game.phase === "recreate" && (
 					<div className="animate-rise-in">
 						<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-							Recreate the color
+							{m.recreate_prompt()}
 						</p>
 						<div className="mt-8">
 							<ColorPicker value={game.guess} onChange={game.setGuess} />
@@ -87,7 +77,7 @@ function Play() {
 							onClick={game.check}
 							className="mt-10 w-full bg-foreground px-10 py-5 text-xs uppercase tracking-[0.4em] text-background transition-opacity hover:opacity-80 sm:w-auto"
 						>
-							Check
+							{m.check()}
 						</button>
 					</div>
 				)}

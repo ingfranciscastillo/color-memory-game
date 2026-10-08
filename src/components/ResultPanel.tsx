@@ -1,5 +1,7 @@
 import { type HSL, hslToCss } from "@/lib/color";
+import { formatPercent } from "@/lib/i18n";
 import { formatSigned, type RoundScore } from "@/lib/scoring";
+import { m } from "@/paraglide/messages.js";
 
 export function ResultPanel({
 	target,
@@ -29,7 +31,7 @@ export function ResultPanel({
 						style={{ backgroundColor: hslToCss(guess) }}
 					/>
 					<p className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-						Your color
+						{m.result_your_color()}
 					</p>
 				</div>
 				<div>
@@ -38,7 +40,7 @@ export function ResultPanel({
 						style={{ backgroundColor: hslToCss(target) }}
 					/>
 					<p className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-						Target
+						{m.result_target()}
 					</p>
 				</div>
 			</div>
@@ -49,15 +51,17 @@ export function ResultPanel({
 					<span className="text-2xl text-muted-foreground"> / 100</span>
 				</p>
 				<p className="text-sm text-muted-foreground">
-					{result.differencePct}% difference
-					{isEndless ? ` · Streak ×${streak}` : ""}
+					{m.result_difference({
+						percent: formatPercent(result.differencePct),
+					})}
+					{isEndless ? ` · ${m.streak({ count: streak })}` : ""}
 				</p>
 			</div>
 
 			<dl className="mt-8 grid grid-cols-3 border-t border-border pt-4 text-sm">
 				<div>
 					<dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-						Hue
+						{m.result_hue()}
 					</dt>
 					<dd className="mt-1 tabular-nums">
 						{formatSigned(result.hueError, "°")}
@@ -65,7 +69,7 @@ export function ResultPanel({
 				</div>
 				<div>
 					<dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-						Saturation
+						{m.result_saturation()}
 					</dt>
 					<dd className="mt-1 tabular-nums">
 						{formatSigned(result.saturationError, "%")}
@@ -73,7 +77,7 @@ export function ResultPanel({
 				</div>
 				<div>
 					<dt className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-						Lightness
+						{m.result_lightness()}
 					</dt>
 					<dd className="mt-1 tabular-nums">
 						{formatSigned(result.lightnessError, "%")}
@@ -87,7 +91,7 @@ export function ResultPanel({
 					onClick={onNext}
 					className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
 				>
-					{isLastRound ? "Finish" : "Next"}
+					{isLastRound ? m.result_finish() : m.result_next()}
 				</button>
 				{isEndless && (
 					<button
@@ -95,7 +99,7 @@ export function ResultPanel({
 						onClick={onFinish}
 						className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
 					>
-						End session
+						{m.result_end_session()}
 					</button>
 				)}
 			</div>

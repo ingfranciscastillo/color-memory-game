@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { formatNumber } from "@/lib/i18n";
+import { m } from "@/paraglide/messages.js";
 
 export function FinalScore({
 	totalScore,
@@ -14,18 +16,18 @@ export function FinalScore({
 	onPlayAgain: () => void;
 }) {
 	const rows = [
-		["Best round", `${bestRound}`],
-		["Max streak", `×${maxStreak}`],
-		["Rounds played", `${roundsPlayed}`],
+		[m.final_best_round(), formatNumber(bestRound)],
+		[m.final_max_streak(), `×${formatNumber(maxStreak)}`],
+		[m.final_rounds_played(), formatNumber(roundsPlayed)],
 	] as const;
 
 	return (
 		<div className="animate-rise-in">
 			<p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-				Final score
+				{m.final_score()}
 			</p>
 			<p className="mt-4 text-7xl font-light tabular-nums sm:text-8xl">
-				{totalScore.toLocaleString()}
+				{formatNumber(totalScore)}
 			</p>
 
 			<dl className="mt-14 divide-y divide-border border-y border-border">
@@ -45,13 +47,13 @@ export function FinalScore({
 					onClick={onPlayAgain}
 					className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
 				>
-					Play again
+					{m.final_play_again()}
 				</button>
 				<Link
 					to="/"
 					className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:underline"
 				>
-					Home
+					{m.final_home()}
 				</Link>
 			</div>
 		</div>
