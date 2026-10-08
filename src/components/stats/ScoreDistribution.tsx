@@ -46,7 +46,7 @@ export function ScoreDistribution({
 							<span className="sr-only">{label}</span>
 							<span
 								aria-hidden="true"
-								className="block w-full rounded-t-[4px] bg-foreground transition-opacity group-hover:opacity-70 group-focus-visible:opacity-70"
+								className="block w-full rounded-t-[4px] bg-ink transition-opacity group-hover:opacity-70 group-focus-visible:opacity-70"
 								style={{
 									height: count ? `${(count / max) * 100}%` : 0,
 									minHeight: count ? 2 : 0,
@@ -54,7 +54,7 @@ export function ScoreDistribution({
 							/>
 							<span
 								aria-hidden="true"
-								className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap border border-border bg-background px-3 py-2 text-xs tabular-nums group-hover:block group-focus-visible:block"
+								className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-md bg-card px-3 py-2 shadow-(--shadow-card) text-xs tabular-nums group-hover:block group-focus-visible:block"
 							>
 								{label}
 							</span>
@@ -63,7 +63,7 @@ export function ScoreDistribution({
 				})}
 			</ol>
 			<div
-				className="mt-2 flex justify-between text-xs text-muted-foreground tabular-nums"
+				className="mt-2 flex justify-between text-xs text-ink-muted tabular-nums"
 				aria-hidden="true"
 			>
 				<span>0</span>

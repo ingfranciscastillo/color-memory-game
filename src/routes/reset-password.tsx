@@ -42,19 +42,19 @@ function ResetPasswordPage() {
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
 			<PageHeader />
-			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+			<h1 className="mt-12 text-4xl font-bold tracking-tight">
 				{m.reset_heading()}
 			</h1>
 
 			<div className="mt-10 animate-rise-in">
 				{invalid ? (
-					<p className="text-sm text-muted-foreground">{m.reset_invalid()}</p>
+					<p className="text-sm text-ink-muted">{m.reset_invalid()}</p>
 				) : status === "done" ? (
 					<div className="space-y-8">
 						<p className="text-sm">{m.reset_done()}</p>
 						<Link
 							to="/"
-							className="inline-block bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
+							className="inline-block rounded-xl bg-ink px-6 py-3 font-semibold text-paper transition-opacity hover:opacity-80"
 						>
 							{m.final_home()}
 						</Link>
@@ -69,7 +69,7 @@ function ResetPasswordPage() {
 					>
 						<label
 							htmlFor={`${ids}-password`}
-							className="text-xs uppercase tracking-[0.2em] text-muted-foreground"
+							className="text-xs text-ink-muted"
 						>
 							{m.reset_label()}
 						</label>
@@ -81,12 +81,12 @@ function ResetPasswordPage() {
 							autoComplete="new-password"
 							value={password}
 							onChange={(event) => setPassword(event.target.value)}
-							className="w-full border border-input bg-background px-4 py-3 text-sm transition-colors focus-visible:border-foreground focus-visible:outline-none"
+							className="w-full rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:outline-none"
 						/>
 						<button
 							type="submit"
 							disabled={status === "saving"}
-							className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80 disabled:opacity-60"
+							className="rounded-xl bg-ink px-6 py-3 font-semibold text-paper transition-opacity hover:opacity-80 disabled:opacity-60"
 						>
 							{m.reset_save()}
 						</button>

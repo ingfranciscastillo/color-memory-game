@@ -67,7 +67,7 @@ export function ModeFan({ value, onChange, meta = {} }: ModeFanProps) {
 			onPointerCancel={() => {
 				drag.current = null;
 			}}
-			className="relative mx-auto h-72 w-full max-w-sm touch-pan-y select-none"
+			className="relative mx-auto h-72 w-full max-w-sm origin-bottom touch-pan-y select-none max-sm:scale-90"
 		>
 			<legend className="sr-only">{m.home_modes()}</legend>
 			{MODES.map((mode, i) => {

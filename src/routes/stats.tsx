@@ -3,8 +3,9 @@ import { type ReactNode, useEffect, useId, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { ScoreDistribution } from "@/components/stats/ScoreDistribution";
 import { CollectionGrid } from "@/components/swatch/CollectionGrid";
+import { ModeChip } from "@/components/swatch/ModeChip";
 import { authClient } from "@/lib/auth-client";
-import { formatNumber, modeLabel } from "@/lib/i18n";
+import { formatNumber } from "@/lib/i18n";
 import { EXCELLENT_SCORE } from "@/lib/stats";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
@@ -21,9 +22,8 @@ export const Route = createFileRoute("/stats")({
 /** A channel bias smaller than this (points) isn't called a tendency. */
 const BIAS_THRESHOLD = 5;
 
-const LABEL = "text-xs uppercase tracking-[0.2em] text-muted-foreground";
-const SECTION_TITLE =
-	"text-xs uppercase tracking-[0.3em] text-muted-foreground";
+const LABEL = "text-xs text-ink-muted";
+const SECTION_TITLE = "text-lg font-semibold";
 
 function StatsPage() {
 	const [stats, setStats] = useState<PlayerStats | null | undefined>(undefined);
@@ -47,7 +47,7 @@ function StatsPage() {
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
 			<PageHeader />
-			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+			<h1 className="mt-12 text-4xl font-bold tracking-tight">
 				{m.stats_heading()}
 			</h1>
 			{stats === undefined ? (
@@ -55,7 +55,7 @@ function StatsPage() {
 					{m.loading()}
 				</p>
 			) : !stats || stats.roundsPlayed === 0 ? (
-				<p className="mt-10 animate-rise-in text-sm text-muted-foreground">
+				<p className="mt-10 animate-rise-in text-sm text-ink-muted">
 					{m.stats_empty()}
 				</p>
 			) : (
@@ -79,11 +79,14 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 
 function Tiles({ items }: { items: [label: string, value: string][] }) {
 	return (
-		<dl className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3">
+		<dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
 			{items.map(([label, value]) => (
-				<div key={label} className="bg-background p-5">
+				<div
+					key={label}
+					className="rounded-xl bg-card p-4 shadow-(--shadow-card)"
+				>
 					<dt className={LABEL}>{label}</dt>
-					<dd className="mt-3 text-3xl font-light tabular-nums">{value}</dd>
+					<dd className="mt-2 text-3xl font-bold tabular-nums">{value}</dd>
 				</div>
 			))}
 		</dl>
@@ -142,65 +145,67 @@ function StatsBody({ stats, userId }: { stats: PlayerStats; userId: string }) {
 			{stats.modes.length > 0 && (
 				<Section title={m.stats_modes()}>
 					<div className="overflow-x-auto">
-						<table className="w-full text-sm tabular-nums">
-							<thead>
-								<tr className="border-b border-border text-left">
-									<th scope="col" className={`py-3 font-normal ${LABEL}`}>
-										{m.stats_col_mode()}
-									</th>
-									<th
-										scope="col"
-										className={`py-3 text-right font-normal ${LABEL}`}
-									>
-										{m.stats_col_games()}
-									</th>
-									<th
-										scope="col"
-										className={`py-3 text-right font-normal ${LABEL}`}
-									>
-										{m.stats_col_best()}
-									</th>
-									<th
-										scope="col"
-										className={`py-3 text-right font-normal ${LABEL}`}
-									>
-										{m.stats_col_average()}
-									</th>
-									<th
-										scope="col"
-										className={`py-3 text-right font-normal ${LABEL}`}
-									>
-										{m.stats_col_per_round()}
-									</th>
-								</tr>
-							</thead>
-							<tbody className="divide-y divide-border">
-								{stats.modes.map((row) => (
-									<tr key={row.mode}>
-										<th
-											scope="row"
-											className="py-3 text-left text-xs font-normal uppercase tracking-[0.2em]"
-										>
-											{modeLabel(row.mode)}
+						<div className="rounded-xl bg-card px-4 py-1 shadow-(--shadow-card)">
+							<table className="w-full text-sm tabular-nums">
+								<thead>
+									<tr className="border-b border-border text-left">
+										<th scope="col" className={`py-3 font-normal ${LABEL}`}>
+											{m.stats_col_mode()}
 										</th>
-										<td className="py-3 text-right">
-											{formatNumber(row.games)}
-										</td>
-										<td className="py-3 text-right">
-											{formatNumber(row.bestScore)}
-										</td>
-										<td className="py-3 text-right">
-											{formatNumber(row.averageScore)}
-										</td>
-										<td className="py-3 text-right">
-											{row.averageRound === null
-												? dash
-												: formatNumber(row.averageRound)}
-										</td>
+										<th
+											scope="col"
+											className={`py-3 text-right font-normal ${LABEL}`}
+										>
+											{m.stats_col_games()}
+										</th>
+										<th
+											scope="col"
+											className={`py-3 text-right font-normal ${LABEL}`}
+										>
+											{m.stats_col_best()}
+										</th>
+										<th
+											scope="col"
+											className={`py-3 text-right font-normal ${LABEL}`}
+										>
+											{m.stats_col_average()}
+										</th>
+										<th
+											scope="col"
+											className={`py-3 text-right font-normal ${LABEL}`}
+										>
+											{m.stats_col_per_round()}
+										</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
+								</thead>
+								<tbody className="divide-y divide-border">
+									{stats.modes.map((row) => (
+										<tr key={row.mode}>
+											<th
+												scope="row"
+												className="py-3 text-left text-sm font-semibold"
+											>
+												<ModeChip mode={row.mode} />
+											</th>
+											<td className="py-3 text-right">
+												{formatNumber(row.games)}
+											</td>
+											<td className="py-3 text-right">
+												{formatNumber(row.bestScore)}
+											</td>
+											<td className="py-3 text-right">
+												{formatNumber(row.averageScore)}
+											</td>
+											<td className="py-3 text-right">
+												{row.averageRound === null
+													? dash
+													: formatNumber(row.averageRound)}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</Section>
 			)}
@@ -209,7 +214,7 @@ function StatsBody({ stats, userId }: { stats: PlayerStats; userId: string }) {
 				<h2 id={distributionId} className={SECTION_TITLE}>
 					{m.stats_distribution()}
 				</h2>
-				<p className="mt-2 text-sm text-muted-foreground">
+				<p className="mt-2 text-sm text-ink-muted">
 					{m.stats_distribution_hint()}
 				</p>
 				<div className="mt-8">
@@ -232,54 +237,56 @@ function StatsBody({ stats, userId }: { stats: PlayerStats; userId: string }) {
 
 			{stats.recent.length > 0 && (
 				<Section title={m.stats_recent()}>
-					<table className="w-full text-sm tabular-nums">
-						<thead>
-							<tr className="border-b border-border text-left">
-								<th scope="col" className={`py-3 font-normal ${LABEL}`}>
-									{m.stats_col_mode()}
-								</th>
-								<th
-									scope="col"
-									className={`py-3 text-right font-normal ${LABEL}`}
-								>
-									{m.stats_col_score()}
-								</th>
-								<th
-									scope="col"
-									className={`py-3 text-right font-normal ${LABEL}`}
-								>
-									{m.stats_col_rounds()}
-								</th>
-								<th
-									scope="col"
-									className={`py-3 text-right font-normal ${LABEL}`}
-								>
-									{m.stats_col_date()}
-								</th>
-							</tr>
-						</thead>
-						<tbody className="divide-y divide-border">
-							{stats.recent.map((game) => (
-								<tr key={game.id}>
-									<th
-										scope="row"
-										className="py-3 text-left text-xs font-normal uppercase tracking-[0.2em]"
-									>
-										{modeLabel(game.mode)}
+					<div className="rounded-xl bg-card px-4 py-1 shadow-(--shadow-card)">
+						<table className="w-full text-sm tabular-nums">
+							<thead>
+								<tr className="border-b border-border text-left">
+									<th scope="col" className={`py-3 font-normal ${LABEL}`}>
+										{m.stats_col_mode()}
 									</th>
-									<td className="py-3 text-right">
-										{formatNumber(game.score)}
-									</td>
-									<td className="py-3 text-right">
-										{formatNumber(game.rounds)}
-									</td>
-									<td className="py-3 text-right text-muted-foreground">
-										{dateFormat.format(new Date(game.finishedAt))}
-									</td>
+									<th
+										scope="col"
+										className={`py-3 text-right font-normal ${LABEL}`}
+									>
+										{m.stats_col_score()}
+									</th>
+									<th
+										scope="col"
+										className={`py-3 text-right font-normal ${LABEL}`}
+									>
+										{m.stats_col_rounds()}
+									</th>
+									<th
+										scope="col"
+										className={`py-3 text-right font-normal ${LABEL}`}
+									>
+										{m.stats_col_date()}
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody className="divide-y divide-border">
+								{stats.recent.map((game) => (
+									<tr key={game.id}>
+										<th
+											scope="row"
+											className="py-3 text-left text-sm font-semibold"
+										>
+											<ModeChip mode={game.mode} />
+										</th>
+										<td className="py-3 text-right">
+											{formatNumber(game.score)}
+										</td>
+										<td className="py-3 text-right">
+											{formatNumber(game.rounds)}
+										</td>
+										<td className="py-3 text-right text-ink-muted">
+											{dateFormat.format(new Date(game.finishedAt))}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 				</Section>
 			)}
 		</div>
@@ -312,7 +319,7 @@ function Channels({ channels }: { channels: ChannelStats }) {
 
 	return (
 		<>
-			<p className="text-sm text-muted-foreground">{m.stats_channels_hint()}</p>
+			<p className="text-sm text-ink-muted">{m.stats_channels_hint()}</p>
 			<dl className="mt-6 space-y-5">
 				{rows.map(([label, value, max, unit]) => (
 					<div key={label}>
@@ -325,7 +332,7 @@ function Channels({ channels }: { channels: ChannelStats }) {
 						</div>
 						<div className="mt-2 h-[2px] bg-border" aria-hidden="true">
 							<div
-								className="h-full bg-foreground"
+								className="h-full bg-ink"
 								style={{ width: `${Math.min(100, (value / max) * 100)}%` }}
 							/>
 						</div>

@@ -23,12 +23,12 @@ const PROVIDERS: Record<SocialProvider, { label: () => string; path: string }> =
 	};
 
 const INPUT =
-	"w-full border border-input bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-foreground focus-visible:outline-none disabled:opacity-60";
-const LABEL = "text-xs uppercase tracking-[0.2em] text-muted-foreground";
+	"w-full rounded-lg border border-input bg-card px-4 py-3 text-sm text-ink placeholder:text-ink-muted transition-colors focus-visible:border-ink focus-visible:outline-none disabled:opacity-60";
+const LABEL = "text-xs text-ink-muted";
 const LINK =
-	"text-xs uppercase tracking-[0.2em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline disabled:opacity-45 disabled:hover:no-underline";
+	"text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline disabled:opacity-45 disabled:hover:no-underline";
 const PRIMARY =
-	"w-full bg-foreground px-8 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80 disabled:opacity-60";
+	"w-full rounded-xl bg-ink px-8 py-4 font-semibold text-paper transition-opacity hover:opacity-80 disabled:opacity-60";
 
 interface AuthDialogProps {
 	open: boolean;
@@ -95,7 +95,7 @@ function CodeCells({
 						<span
 							// biome-ignore lint/suspicious/noArrayIndexKey: fixed code positions.
 							key={index}
-							className={`flex aspect-square flex-1 items-center justify-center border text-2xl font-light tabular-nums transition-colors ${
+							className={`flex aspect-square flex-1 items-center justify-center rounded-lg border bg-paper text-2xl font-semibold tabular-nums transition-colors ${
 								active ? "border-foreground" : "border-input"
 							}`}
 						>
@@ -316,7 +316,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 			<div key={`${step}-${mode}`} className="animate-step-in space-y-6">
 				{step === "email" && (
 					<>
-						<p className="text-sm text-muted-foreground">{m.auth_intro()}</p>
+						<p className="text-sm text-ink-muted">{m.auth_intro()}</p>
 
 						{providers.length > 0 && (
 							<div className="space-y-4">
@@ -326,7 +326,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 										type="button"
 										disabled={busy}
 										onClick={() => social(provider)}
-										className="flex w-full items-center justify-center gap-3 border border-input px-8 py-4 text-xs uppercase tracking-[0.3em] transition-colors hover:border-foreground disabled:opacity-60"
+										className="flex w-full items-center justify-center gap-3 border border-input px-8 py-4 text-sm font-semibold transition-colors hover:border-foreground disabled:opacity-60"
 									>
 										<svg
 											viewBox="0 0 24 24"
@@ -340,7 +340,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 									</button>
 								))}
 								<div
-									className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-muted-foreground"
+									className="flex items-center gap-4 text-xs text-ink-muted"
 									aria-hidden="true"
 								>
 									<span className="h-px flex-1 bg-border" />
@@ -395,15 +395,13 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 							{m.auth_use_password()}
 						</button>
 
-						<p className="text-xs text-muted-foreground">
-							{m.auth_age_notice()}
-						</p>
+						<p className="text-xs text-ink-muted">{m.auth_age_notice()}</p>
 					</>
 				)}
 
 				{step === "code" && (
 					<>
-						<p id={codeHintId} className="text-sm text-muted-foreground">
+						<p id={codeHintId} className="text-sm text-ink-muted">
 							{m.auth_code_hint({ email })}
 						</p>
 
@@ -421,7 +419,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 						</div>
 						{errorMessage}
 						{busy && (
-							<p role="status" className="text-sm text-muted-foreground">
+							<p role="status" className="text-sm text-ink-muted">
 								{m.auth_checking()}
 							</p>
 						)}
@@ -525,7 +523,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 										/>
 										<button
 											type="button"
-											className="absolute inset-y-0 right-0 px-4 text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-foreground"
+											className="absolute inset-y-0 right-0 px-4 text-xs text-ink-muted transition-colors hover:text-ink"
 											aria-label={
 												showPassword
 													? m.auth_hide_password()
@@ -538,7 +536,7 @@ export function AuthDialog({ open, onClose }: AuthDialogProps) {
 										</button>
 									</div>
 									{mode === "sign-up" && (
-										<p className="text-xs text-muted-foreground">
+										<p className="text-xs text-ink-muted">
 											{m.auth_password_min()}
 										</p>
 									)}

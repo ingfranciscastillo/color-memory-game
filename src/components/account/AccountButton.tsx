@@ -42,7 +42,7 @@ function AccountButtonInner() {
 			<Link
 				to="/profile"
 				aria-label={m.account_profile_label({ name: account.name })}
-				className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground"
+				className="flex items-center gap-3 text-sm font-semibold text-ink-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
 			>
 				<span className="hidden max-w-40 truncate sm:inline">
 					{account.name}
@@ -57,7 +57,7 @@ function AccountButtonInner() {
 			<button
 				type="button"
 				onClick={() => setDialogOpen(true)}
-				className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+				className="text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
 				style={{ minHeight: SIZE }}
 			>
 				{m.account_sign_in()}

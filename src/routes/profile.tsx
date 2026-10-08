@@ -18,15 +18,15 @@ export const Route = createFileRoute("/profile")({
 	component: ProfilePage,
 });
 
-const LABEL = "text-xs uppercase tracking-[0.2em] text-muted-foreground";
+const LABEL = "text-xs text-ink-muted";
 const LINK =
-	"text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline";
+	"text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline";
 
 function ProfilePage() {
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
 			<PageHeader />
-			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+			<h1 className="mt-12 text-4xl font-bold tracking-tight">
 				{m.profile_heading()}
 			</h1>
 			<ProfileBody />
@@ -48,13 +48,11 @@ function ProfileBody() {
 	if (!account) {
 		return (
 			<div className="mt-10 animate-rise-in space-y-8">
-				<p className="text-sm text-muted-foreground">
-					{m.profile_signed_out()}
-				</p>
+				<p className="text-sm text-ink-muted">{m.profile_signed_out()}</p>
 				<button
 					type="button"
 					onClick={() => setSignInOpen(true)}
-					className="bg-foreground px-10 py-4 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80"
+					className="rounded-xl bg-ink px-6 py-3 font-semibold text-paper transition-opacity hover:opacity-80"
 				>
 					{m.account_sign_in()}
 				</button>
@@ -178,17 +176,17 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 						aria-describedby={`${ids}-name-hint`}
 						value={name}
 						onChange={(event) => setName(event.target.value)}
-						className="min-w-0 flex-1 border border-input bg-background px-4 py-3 text-sm transition-colors focus-visible:border-foreground focus-visible:outline-none"
+						className="min-w-0 flex-1 rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:outline-none"
 					/>
 					<button
 						type="submit"
 						disabled={!nameChanged || status === "saving"}
-						className="bg-foreground px-6 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80 disabled:opacity-45 disabled:hover:opacity-45"
+						className="rounded-lg bg-ink px-5 font-semibold text-paper transition-opacity hover:opacity-80 disabled:opacity-45 disabled:hover:opacity-45"
 					>
 						{status === "saved" ? m.profile_saved() : m.profile_save()}
 					</button>
 				</div>
-				<p id={`${ids}-name-hint`} className="text-xs text-muted-foreground">
+				<p id={`${ids}-name-hint`} className="text-xs text-ink-muted">
 					{m.profile_name_hint()}
 				</p>
 			</form>
@@ -211,12 +209,12 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 					className="mt-0.5 size-4 accent-foreground"
 				/>
 				<span className="space-y-1">
-					<span className="block text-xs uppercase tracking-[0.2em]">
+					<span className="block text-xs font-semibold">
 						{m.profile_leaderboard()}
 					</span>
 					<span
 						id={`${ids}-leaderboard-hint`}
-						className="block text-xs text-muted-foreground"
+						className="block text-xs text-ink-muted"
 					>
 						{m.profile_leaderboard_hint()}
 					</span>
@@ -266,7 +264,7 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 						<button
 							type="button"
 							onClick={deleteAccount}
-							className="bg-destructive px-8 py-4 text-xs uppercase tracking-[0.3em] text-destructive-foreground transition-opacity hover:opacity-80"
+							className="rounded-xl bg-destructive px-6 py-3 font-semibold text-destructive-foreground transition-opacity hover:opacity-80"
 						>
 							{m.profile_delete_yes()}
 						</button>

@@ -53,11 +53,11 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
 			{mounted && (
 				<div className="modal-card">
 					<div className="flex items-baseline justify-between gap-4">
-						<h2 className="text-xs uppercase tracking-[0.3em]">{title}</h2>
+						<h2 className="text-xl font-bold tracking-tight">{title}</h2>
 						<button
 							type="button"
 							onClick={onClose}
-							className="text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+							className="text-sm text-ink-muted underline-offset-4 hover:text-ink hover:underline"
 						>
 							{m.close()}
 						</button>

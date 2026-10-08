@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { Avatar } from "@/components/Avatar";
 import { AuthDialog } from "@/components/account/AuthDialog";
 import { PageHeader } from "@/components/PageHeader";
+import { ModeChip } from "@/components/swatch/ModeChip";
 import { authClient } from "@/lib/auth-client";
-import { formatNumber, localizedHead, modeLabel } from "@/lib/i18n";
+import { formatNumber, localizedHead } from "@/lib/i18n";
 import {
 	BOARDS,
 	isBoard,
@@ -41,9 +42,9 @@ export const Route = createFileRoute("/leaderboard")({
 
 type Data = Awaited<ReturnType<typeof getLeaderboard>>;
 
-const LABEL = "text-xs uppercase tracking-[0.2em] text-muted-foreground";
+const LABEL = "text-xs text-ink-muted";
 const LINK =
-	"text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline";
+	"text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline";
 
 function LeaderboardPage() {
 	const { board = "daily", day } = Route.useSearch();
@@ -79,23 +80,25 @@ function LeaderboardPage() {
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
 			<PageHeader />
-			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+			<h1 className="mt-12 text-4xl font-bold tracking-tight">
 				{m.leaderboard_heading()}
 			</h1>
 
 			<nav aria-label={m.leaderboard_boards()} className="mt-10">
-				<ul className="flex flex-wrap gap-x-6 gap-y-3">
+				<ul className="flex flex-wrap gap-2">
 					{BOARDS.map((option) => (
 						<li key={option}>
 							<Link
 								to="/leaderboard"
 								search={{ board: option }}
 								aria-current={option === board ? "page" : undefined}
-								className={`text-xs uppercase tracking-[0.3em] transition-opacity ${
-									option === board ? "" : "opacity-45 hover:opacity-80"
+								className={`block rounded-full px-3 py-1.5 text-sm font-semibold transition-colors ${
+									option === board
+										? "bg-card shadow-(--shadow-card)"
+										: "text-ink-muted hover:text-ink"
 								}`}
 							>
-								{modeLabel(option)}
+								<ModeChip mode={option} />
 							</Link>
 						</li>
 					))}
@@ -138,7 +141,7 @@ function Board({ data, onJoined }: { data: Data; onJoined: () => void }) {
 	return (
 		<div key={`${data.board}-${data.period}`} className="mt-10 animate-rise-in">
 			<div className="flex flex-wrap items-baseline justify-between gap-4">
-				<p className="text-sm uppercase tracking-[0.2em]">{periodLabel}</p>
+				<p className="text-sm font-semibold">{periodLabel}</p>
 				{daily && (
 					<div className="flex gap-6">
 						<Link
@@ -166,57 +169,57 @@ function Board({ data, onJoined }: { data: Data; onJoined: () => void }) {
 					</div>
 				)}
 			</div>
-			<p className="mt-2 text-sm text-muted-foreground">
+			<p className="mt-2 text-sm text-ink-muted">
 				{daily ? m.leaderboard_rules_daily() : m.leaderboard_rules_weekly()}
 			</p>
 
 			<Invite you={data.you} onJoined={onJoined} />
 
 			{data.entries.length === 0 && !data.me ? (
-				<p className="mt-10 text-sm text-muted-foreground">
-					{m.leaderboard_empty()}
-				</p>
+				<p className="mt-10 text-sm text-ink-muted">{m.leaderboard_empty()}</p>
 			) : (
 				<>
-					<table className="mt-10 w-full text-sm tabular-nums">
-						<thead>
-							<tr className="border-b border-border text-left">
-								<th scope="col" className={`w-16 py-3 font-normal ${LABEL}`}>
-									{m.leaderboard_col_rank()}
-								</th>
-								<th scope="col" className={`py-3 font-normal ${LABEL}`}>
-									{m.leaderboard_col_player()}
-								</th>
-								{!daily && (
+					<div className="mt-10 rounded-xl bg-card px-4 py-1 shadow-(--shadow-card)">
+						<table className="w-full text-sm tabular-nums">
+							<thead>
+								<tr className="border-b border-border text-left">
+									<th scope="col" className={`w-16 py-3 font-normal ${LABEL}`}>
+										{m.leaderboard_col_rank()}
+									</th>
+									<th scope="col" className={`py-3 font-normal ${LABEL}`}>
+										{m.leaderboard_col_player()}
+									</th>
+									{!daily && (
+										<th
+											scope="col"
+											className={`py-3 text-right font-normal ${LABEL}`}
+										>
+											{m.leaderboard_col_games()}
+										</th>
+									)}
 									<th
 										scope="col"
 										className={`py-3 text-right font-normal ${LABEL}`}
 									>
-										{m.leaderboard_col_games()}
+										{m.leaderboard_col_score()}
 									</th>
+								</tr>
+							</thead>
+							<tbody className="divide-y divide-border">
+								{data.entries.map((entry) => (
+									<Row
+										key={entry.rank}
+										entry={entry}
+										mine={data.me?.rank === entry.rank}
+										daily={daily}
+									/>
+								))}
+								{data.me && !meInTop && (
+									<Row entry={data.me} mine daily={daily} separated />
 								)}
-								<th
-									scope="col"
-									className={`py-3 text-right font-normal ${LABEL}`}
-								>
-									{m.leaderboard_col_score()}
-								</th>
-							</tr>
-						</thead>
-						<tbody className="divide-y divide-border">
-							{data.entries.map((entry) => (
-								<Row
-									key={entry.rank}
-									entry={entry}
-									mine={data.me?.rank === entry.rank}
-									daily={daily}
-								/>
-							))}
-							{data.me && !meInTop && (
-								<Row entry={data.me} mine daily={daily} separated />
-							)}
-						</tbody>
-					</table>
+							</tbody>
+						</table>
+					</div>
 					<p className={`mt-4 ${LABEL}`}>
 						{m.leaderboard_total({
 							// The cached top may predate your row: never show fewer than your rank.
@@ -227,7 +230,7 @@ function Board({ data, onJoined }: { data: Data; onJoined: () => void }) {
 			)}
 
 			{data.you?.visible && !data.me && data.entries.length > 0 && (
-				<p className="mt-6 text-sm text-muted-foreground">
+				<p className="mt-6 text-sm text-ink-muted">
 					{m.leaderboard_not_ranked()}
 				</p>
 			)}
@@ -251,22 +254,20 @@ function Row({
 		<tr
 			className={`${mine ? "bg-muted" : ""} ${separated ? "border-t-2 border-border" : ""}`}
 		>
-			<td className="py-3 pl-2 text-muted-foreground">
-				{formatNumber(entry.rank)}
-			</td>
+			<td className="py-3 pl-2 text-ink-muted">{formatNumber(entry.rank)}</td>
 			<th scope="row" className="py-3 text-left font-normal">
 				<span className="flex items-center gap-3">
 					<Avatar seed={entry.avatarSeed} size={24} />
 					<span className="truncate">{entry.name}</span>
 					{mine && (
-						<span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+						<span className="text-xs text-ink-muted">
 							· {m.leaderboard_you()}
 						</span>
 					)}
 				</span>
 			</th>
 			{!daily && (
-				<td className="py-3 text-right text-muted-foreground">
+				<td className="py-3 text-right text-ink-muted">
 					{formatNumber(entry.games ?? 0)}
 				</td>
 			)}
@@ -295,7 +296,7 @@ function Invite({ you, onJoined }: { you: Data["you"]; onJoined: () => void }) {
 	const anonymous = !you || you.anonymous;
 
 	return (
-		<div className="mt-8 flex flex-wrap items-center justify-between gap-4 border border-border p-5">
+		<div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-card p-5 shadow-(--shadow-card)">
 			<p className="text-sm">
 				{anonymous ? m.leaderboard_join_anon() : m.leaderboard_join_hidden()}
 			</p>
@@ -303,7 +304,7 @@ function Invite({ you, onJoined }: { you: Data["you"]; onJoined: () => void }) {
 				type="button"
 				disabled={busy}
 				onClick={() => (anonymous ? setSignInOpen(true) : void join())}
-				className="bg-foreground px-6 py-3 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80 disabled:opacity-60"
+				className="rounded-xl bg-ink px-6 py-3 font-semibold text-paper transition-opacity hover:opacity-80 disabled:opacity-60"
 			>
 				{anonymous ? m.account_sign_in() : m.leaderboard_join_button()}
 			</button>

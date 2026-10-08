@@ -47,28 +47,28 @@ function ChangelogPage() {
 	return (
 		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
 			<PageHeader />
-			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+			<h1 className="mt-12 text-4xl font-bold tracking-tight">
 				{m.changelog_heading()}
 			</h1>
 
-			<div className="mt-12 divide-y divide-border border-y border-border">
+			<div className="mt-10 space-y-4">
 				{CHANGELOG.map((release, index) => (
 					<article
 						key={release.version}
 						aria-labelledby={`version-${release.version}`}
-						className="animate-rise-in py-8"
+						className="animate-rise-in rounded-xl bg-card p-5 shadow-(--shadow-card)"
 						style={stagger(index)}
 					>
 						<header className="flex items-baseline justify-between gap-4">
 							<h2
 								id={`version-${release.version}`}
-								className="text-sm uppercase tracking-[0.2em]"
+								className="text-sm font-semibold"
 							>
 								{m.changelog_version({ version: release.version })}
 							</h2>
 							<time
 								dateTime={release.date}
-								className="text-xs text-muted-foreground tabular-nums"
+								className="text-xs text-ink-muted tabular-nums"
 							>
 								{dateFormat.format(new Date(release.date))}
 							</time>
@@ -76,7 +76,7 @@ function ChangelogPage() {
 						<ul className="mt-5 space-y-3 text-sm">
 							{release.changes.map((change) => (
 								<li key={change.text.en} className="flex gap-4">
-									<span className="w-16 shrink-0 pt-0.5 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+									<span className="w-16 shrink-0 pt-0.5 text-xs text-ink-muted">
 										{KIND_LABEL[change.kind]()}
 									</span>
 									<span>{change.text[locale]}</span>
