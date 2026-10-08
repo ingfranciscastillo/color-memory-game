@@ -1,0 +1,24 @@
+import { type ReactNode, useEffect } from "react";
+import { currentTheme, setThemeColor, THEME_COLORS } from "@/lib/theme";
+
+/** `--stage` (oklch(0.6 0 0)) as hex, for the browser UI color. */
+const STAGE_HEX = "#808080";
+
+/**
+ * The playing surface: neutral mid gray, the same in both themes, with
+ * nothing colorful on it but the swatches. Text on it is always dark ink
+ * (≈ 5:1 on this gray), whatever the theme. The browser's UI turns gray
+ * too, so no theme color frames the target.
+ */
+export function Stage({ children }: { children: ReactNode }) {
+	useEffect(() => {
+		setThemeColor(STAGE_HEX);
+		return () => setThemeColor(THEME_COLORS[currentTheme()]);
+	}, []);
+
+	return (
+		<div className="fixed inset-0 z-10 flex flex-col overflow-y-auto bg-stage text-[#1a1a1a]">
+			{children}
+		</div>
+	);
+}

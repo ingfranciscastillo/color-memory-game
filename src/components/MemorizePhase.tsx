@@ -1,40 +1,48 @@
-import { useEffect } from "react";
-import { type HSL, hslToCss, hslToHex } from "@/lib/color";
-import { currentTheme, setThemeColor, THEME_COLORS } from "@/lib/theme";
+import { SwatchCard } from "@/components/swatch/SwatchCard";
+import type { HSL } from "@/lib/color";
+import { colorName } from "@/lib/color-name";
+import { formatSeconds } from "@/lib/i18n";
 import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 
+/**
+ * The target as a large swatch with its name. Time drains as a thin line
+ * along the block's bottom edge, with the seconds in the label: no big
+ * numbers over the color.
+ */
 export function MemorizePhase({
 	color,
 	remaining,
-	round,
-	totalRounds,
+	duration,
 }: {
 	color: HSL;
 	remaining: number;
-	round: number;
-	totalRounds: number;
+	duration: number;
 }) {
-	// Tint the browser UI with the target too, so the color really fills the screen.
-	useEffect(() => {
-		setThemeColor(hslToHex(color));
-		return () => setThemeColor(THEME_COLORS[currentTheme()]);
-	}, [color]);
+	const left =
+		duration > 0 ? Math.max(0, Math.min(1, remaining / duration)) : 0;
 
 	return (
-		<div
-			className="fixed inset-0 z-10 animate-fade-in"
-			style={{ backgroundColor: hslToCss(color) }}
+		<SwatchCard
+			color={color}
+			size="lg"
+			title={colorName(color, getLocale())}
+			subtitle={m.memorize_hint()}
+			footer={
+				<>
+					<span>Color Memory</span>
+					<span role="timer" aria-live="off">
+						{formatSeconds(remaining)}
+					</span>
+				</>
+			}
+			viewTransitionName="swatch"
 		>
-			<div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6 sm:p-10">
-				<span className="text-xs uppercase tracking-[0.3em] mix-blend-difference text-white">
-					{Number.isFinite(totalRounds)
-						? m.round_of({ round, total: totalRounds })
-						: m.round({ round })}
-				</span>
-				<span className="font-mono text-sm tabular-nums mix-blend-difference text-white sm:text-base">
-					{remaining.toFixed(1)}s
-				</span>
-			</div>
-		</div>
+			<span
+				aria-hidden="true"
+				className="absolute inset-x-0 bottom-0 h-1 origin-left bg-white/85"
+				style={{ transform: `scaleX(${left})` }}
+			/>
+		</SwatchCard>
 	);
 }

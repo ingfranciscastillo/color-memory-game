@@ -43,6 +43,13 @@ export function modeDescription(mode: GameMode) {
 export const formatNumber = (n: number) =>
 	new Intl.NumberFormat(getLocale()).format(n);
 
+/** `2.5` → "2.5 s" in English, "2,5 s" in Spanish; always one decimal. */
+export const formatSeconds = (seconds: number) =>
+	`${new Intl.NumberFormat(getLocale(), {
+		minimumFractionDigits: 1,
+		maximumFractionDigits: 1,
+	}).format(seconds)} s`;
+
 /** `12.5` → "12.5%" in English, "12,5 %" in Spanish. */
 export const formatPercent = (n: number) =>
 	new Intl.NumberFormat(getLocale(), {

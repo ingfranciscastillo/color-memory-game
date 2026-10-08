@@ -218,5 +218,8 @@
 	"home_tile_daily": "Racha diaria",
 	"mode_meta_today": "Hoy",
 	"mode_meta_streak": "Hoy · racha ×{count}",
-	"mode_meta_done": "Hecho hoy"
+	"mode_meta_done": "Hecho hoy",
+	"memorize_hint": "Memoriza este color",
+	"stamp_out_of": "de 100",
+	"stamp_nailed": "¡Clavado!"
 }

@@ -47,6 +47,14 @@ export interface RoundView {
 	target: HSL | null;
 }
 
+/** A scored round, as shown on the result and final screens. */
+export interface AnsweredRound {
+	index: number;
+	target: HSL;
+	guess: HSL;
+	score: number;
+}
+
 export interface GameView {
 	id: string;
 	mode: GameMode;

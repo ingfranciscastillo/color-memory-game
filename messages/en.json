@@ -218,5 +218,8 @@
 	"home_tile_daily": "Daily streak",
 	"mode_meta_today": "Today",
 	"mode_meta_streak": "Today · streak ×{count}",
-	"mode_meta_done": "Done today"
+	"mode_meta_done": "Done today",
+	"memorize_hint": "Memorize this color",
+	"stamp_out_of": "of 100",
+	"stamp_nailed": "Nailed it"
 }

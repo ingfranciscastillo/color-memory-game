@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { type HSL, hslToCss } from "@/lib/color";
+import type { HSL } from "@/lib/color";
 import { m } from "@/paraglide/messages.js";
 
 type Props = {
@@ -109,7 +109,7 @@ export function ColorPicker({ value, onChange }: Props) {
 	};
 
 	const focusRing =
-		"outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-foreground";
+		"outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1a1a1a]";
 
 	return (
 		<div className="w-full select-none">
@@ -118,7 +118,7 @@ export function ColorPicker({ value, onChange }: Props) {
 				onPointerDown={drag(handleArea)}
 				onPointerMove={move(handleArea)}
 				onKeyDown={onAreaKey}
-				className={`relative h-56 w-full touch-none sm:h-64 ${focusRing}`}
+				className={`relative h-40 w-full touch-none rounded-xl sm:h-48 ${focusRing}`}
 				style={{
 					backgroundColor: `hsl(${value.h} 100% 50%)`,
 					backgroundImage:
@@ -136,7 +136,7 @@ export function ColorPicker({ value, onChange }: Props) {
 				tabIndex={0}
 			>
 				<span
-					className="pointer-events-none absolute h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white ring-1 ring-black/40"
+					className="pointer-events-none absolute size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white shadow-[0_0_0_1px_rgb(0_0_0/0.35),0_2px_6px_rgb(0_0_0/0.3)]"
 					style={{ left: `${sv * 100}%`, top: `${(1 - v) * 100}%` }}
 				/>
 			</div>
@@ -146,7 +146,7 @@ export function ColorPicker({ value, onChange }: Props) {
 				onPointerDown={drag((x) => handleHue(x))}
 				onPointerMove={move((x) => handleHue(x))}
 				onKeyDown={onHueKey}
-				className={`relative mt-4 h-8 w-full touch-none ${focusRing}`}
+				className={`relative mt-4 h-7 w-full touch-none rounded-full ${focusRing}`}
 				style={{
 					backgroundImage:
 						"linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)",
@@ -160,17 +160,10 @@ export function ColorPicker({ value, onChange }: Props) {
 				tabIndex={0}
 			>
 				<span
-					className="pointer-events-none absolute top-0 h-8 w-1.5 -translate-x-1/2 border border-black/40 bg-background"
+					className="pointer-events-none absolute top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white shadow-[0_0_0_1px_rgb(0_0_0/0.35),0_2px_6px_rgb(0_0_0/0.3)]"
 					style={{ left: `${(value.h / 360) * 100}%` }}
 				/>
 			</div>
-
-			<div
-				className="mt-6 h-24 w-full transition-colors duration-150"
-				style={{ backgroundColor: hslToCss(value) }}
-				role="img"
-				aria-label={m.picker_preview()}
-			/>
 		</div>
 	);
 }

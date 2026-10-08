@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { m } from "@/paraglide/messages.js";
 import { finishGame, nextRound, startGame, submitGuess } from "@/server/games";
-import type { GameTotals, GameView, GuessResult } from "@/server/games-store";
+import type {
+	AnsweredRound,
+	GameTotals,
+	GameView,
+	GuessResult,
+} from "@/server/games-store";
 import { authClient } from "./auth-client";
 import type { HSL } from "./color";
 import { type GameMode, roundsForMode } from "./modes";
+import { withViewTransition } from "./view-transition";
 
 export type Phase =
 	| "loading"
@@ -53,6 +59,10 @@ export function useColorMemoryGame(mode: GameMode) {
 	const [guess, setGuess] = useState<HSL>(randomGuess);
 	const [result, setResult] = useState<GuessResult | null>(null);
 	const [remaining, setRemaining] = useState(0);
+	/** The round's full memorize time, in seconds (for the timer line). */
+	const [duration, setDuration] = useState(0);
+	/** Answered rounds of this game, in order (round strip, final palette). */
+	const [history, setHistory] = useState<AnsweredRound[]>([]);
 	const [totals, setTotals] = useState<GameTotals>(EMPTY_TOTALS);
 	const [busy, setBusy] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -92,19 +102,22 @@ export function useColorMemoryGame(mode: GameMode) {
 				return applyView(await nextRound({ data: { id: view.id } }), fresh);
 			}
 			const { round } = view;
-			setRoundIndex(round.index);
-			setResult(null);
-			setGuess(randomGuess());
-			if (round.target && round.msLeft > 0) {
-				setTarget(round.target);
-				setRemaining(round.msLeft / 1000);
-				deadline.current = performance.now() + round.msLeft;
-				setPhase("memorize");
-			} else {
-				// Memorize time ran out while away: no second look at the color.
-				setTarget(null);
-				setPhase("recreate");
-			}
+			withViewTransition(() => {
+				setRoundIndex(round.index);
+				setResult(null);
+				setGuess(randomGuess());
+				setDuration(round.memorizeMs / 1000);
+				if (round.target && round.msLeft > 0) {
+					setTarget(round.target);
+					setRemaining(round.msLeft / 1000);
+					deadline.current = performance.now() + round.msLeft;
+					setPhase("memorize");
+				} else {
+					// Memorize time ran out while away: no second look at the color.
+					setTarget(null);
+					setPhase("recreate");
+				}
+			});
 		},
 		[],
 	);
@@ -114,6 +127,7 @@ export function useColorMemoryGame(mode: GameMode) {
 			call(async () => {
 				setPhase("loading");
 				setAlreadyPlayed(false);
+				setHistory([]);
 				await ensureSession();
 				const view = await startGame({ data: { mode } });
 				// A daily game with answered rounds is being resumed, not started.
@@ -134,8 +148,10 @@ export function useColorMemoryGame(mode: GameMode) {
 			const left = deadline.current - performance.now();
 			if (left <= 0) {
 				window.clearInterval(id);
-				setRemaining(0);
-				setPhase("recreate");
+				withViewTransition(() => {
+					setRemaining(0);
+					setPhase("recreate");
+				});
 			} else {
 				setRemaining(left / 1000);
 			}
@@ -149,10 +165,21 @@ export function useColorMemoryGame(mode: GameMode) {
 			const scored = await submitGuess({
 				data: { id: gameId, index: roundIndex, guess },
 			});
-			setResult(scored);
-			setTarget(scored.target);
-			setTotals(scored.totals);
-			setPhase("result");
+			withViewTransition(() => {
+				setResult(scored);
+				setTarget(scored.target);
+				setTotals(scored.totals);
+				setHistory((rounds) => [
+					...rounds,
+					{
+						index: roundIndex,
+						target: scored.target,
+						guess: scored.guess,
+						score: scored.result.score,
+					},
+				]);
+				setPhase("result");
+			});
 		});
 	}, [gameId, phase, busy, call, roundIndex, guess]);
 
@@ -185,6 +212,8 @@ export function useColorMemoryGame(mode: GameMode) {
 		setGuess,
 		result,
 		remaining,
+		duration,
+		history,
 		...totals,
 		busy,
 		error,
