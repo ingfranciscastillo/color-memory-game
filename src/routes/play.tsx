@@ -4,6 +4,7 @@ import { BrandMark } from "@/components/BrandMark";
 import { ColorPicker } from "@/components/ColorPicker";
 import { PaletteSummary } from "@/components/game/PaletteSummary";
 import { RoundStrip } from "@/components/game/RoundStrip";
+import { ShareSheet } from "@/components/game/ShareSheet";
 import { Stage } from "@/components/game/Stage";
 import { MemorizePhase } from "@/components/MemorizePhase";
 import { PageHeader } from "@/components/PageHeader";
@@ -11,7 +12,7 @@ import { ResultPanel } from "@/components/ResultPanel";
 import { SwatchCard } from "@/components/swatch/SwatchCard";
 import { type HSL, hslToCss } from "@/lib/color";
 import { localizedHead, modeLabel } from "@/lib/i18n";
-import { type GameMode, isGameMode } from "@/lib/modes";
+import { type GameMode, isGameMode, todayKey } from "@/lib/modes";
 import { isMotionReduced } from "@/lib/motion";
 import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
 import { m } from "@/paraglide/messages.js";
@@ -94,6 +95,15 @@ function Play() {
 						rank={rank}
 						note={mode === "daily" ? m.daily_done() : undefined}
 						onPlayAgain={mode === "daily" ? undefined : game.reset}
+						share={
+							mode === "daily" && game.history.length > 0 ? (
+								<ShareSheet
+									dayKey={todayKey()}
+									scores={game.history.map((round) => round.score)}
+									total={game.totalScore}
+								/>
+							) : undefined
+						}
 					/>
 				</div>
 				{errorBlock}

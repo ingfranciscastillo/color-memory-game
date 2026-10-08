@@ -222,5 +222,9 @@
 	"memorize_hint": "Memorize this color",
 	"stamp_out_of": "of 100",
 	"stamp_nailed": "Nailed it",
-	"final_rank_today": "Rank {rank} today"
+	"final_rank_today": "Rank {rank} today",
+	"share_button": "Share palette",
+	"share_copied": "Copied! Paste it anywhere.",
+	"share_download": "Download image",
+	"share_failed": "Couldn't share. Try downloading the image."
 }

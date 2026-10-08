@@ -222,5 +222,9 @@
 	"memorize_hint": "Memoriza este color",
 	"stamp_out_of": "de 100",
 	"stamp_nailed": "¡Clavado!",
-	"final_rank_today": "Puesto {rank} de hoy"
+	"final_rank_today": "Puesto {rank} de hoy",
+	"share_button": "Compartir paleta",
+	"share_copied": "¡Copiado! Pégalo donde quieras.",
+	"share_download": "Descargar imagen",
+	"share_failed": "No se pudo compartir. Prueba a descargar la imagen."
 }
