@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
 import { ColorPicker } from "@/components/ColorPicker";
-import { FinalScore } from "@/components/FinalScore";
+import { PaletteSummary } from "@/components/game/PaletteSummary";
 import { RoundStrip } from "@/components/game/RoundStrip";
 import { Stage } from "@/components/game/Stage";
 import { MemorizePhase } from "@/components/MemorizePhase";
@@ -14,6 +15,7 @@ import { type GameMode, isGameMode } from "@/lib/modes";
 import { isMotionReduced } from "@/lib/motion";
 import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
 import { m } from "@/paraglide/messages.js";
+import { getLeaderboard } from "@/server/leaderboard";
 
 export const Route = createFileRoute("/play")({
 	validateSearch: (search: Record<string, unknown>): { mode: GameMode } => ({
@@ -40,10 +42,29 @@ export const Route = createFileRoute("/play")({
 /** The complementary color: what an afterimage of `color` looks like. */
 const complement = ({ h, s, l }: HSL): HSL => ({ h: (h + 180) % 360, s, l });
 
+/** Your rank on today's daily board, once the game is over (null if hidden). */
+function useDailyRank(active: boolean) {
+	const [rank, setRank] = useState<number | null>(null);
+	useEffect(() => {
+		if (!active) return;
+		let cancelled = false;
+		getLeaderboard({ data: { board: "daily" } })
+			.then((board) => {
+				if (!cancelled) setRank(board.me?.rank ?? null);
+			})
+			.catch(() => {});
+		return () => {
+			cancelled = true;
+		};
+	}, [active]);
+	return rank;
+}
+
 function Play() {
 	const { mode } = Route.useSearch();
 	const game = useColorMemoryGame(mode);
 	const isEndless = mode === "endless";
+	const rank = useDailyRank(mode === "daily" && game.phase === "final");
 
 	const errorBlock = game.error && (
 		<div role="alert" className="mt-6 animate-rise-in space-y-3 text-center">
@@ -63,14 +84,16 @@ function Play() {
 		return (
 			<main className="mx-auto min-h-screen max-w-2xl px-6 py-8 sm:px-10 sm:py-12">
 				<PageHeader />
-				<div className="mt-12">
-					<FinalScore
-						totalScore={game.totalScore}
+				<div className="mt-10">
+					<PaletteSummary
+						mode={mode}
+						rounds={game.history}
+						total={game.totalScore}
 						bestRound={game.bestRound}
 						maxStreak={game.maxStreak}
-						roundsPlayed={game.roundsPlayed}
-						onPlayAgain={mode === "daily" ? undefined : game.reset}
+						rank={rank}
 						note={mode === "daily" ? m.daily_done() : undefined}
+						onPlayAgain={mode === "daily" ? undefined : game.reset}
 					/>
 				</div>
 				{errorBlock}

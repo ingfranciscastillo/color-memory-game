@@ -8,7 +8,7 @@
  * left: after that they go straight to recreating it.
  */
 
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, eq, isNotNull, isNull, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { dailyChallenges, games, rounds } from "@/db/schema";
 import type { HSL } from "@/lib/color";
@@ -62,6 +62,11 @@ export interface GameView {
 	totals: GameTotals;
 	/** The round being played (unanswered), or null between rounds. */
 	round: RoundView | null;
+	/**
+	 * Rounds already scored, in order: the round strip, the final palette and
+	 * sharing are rebuilt from here after a reload.
+	 */
+	answered: AnsweredRound[];
 }
 
 export interface GuessResult {
@@ -110,17 +115,33 @@ function roundView(round: RoundRow, created: boolean): RoundView {
 	};
 }
 
-function gameView(
+async function gameView(
+	tx: Tx,
 	game: GameRow,
 	open: RoundRow | null,
 	created = false,
-): GameView {
+): Promise<GameView> {
+	const scored = await tx
+		.select()
+		.from(rounds)
+		.where(and(eq(rounds.gameId, game.id), isNotNull(rounds.score)))
+		.orderBy(asc(rounds.index));
 	return {
 		id: game.id,
 		mode: game.mode as GameMode,
 		finished: game.status === "finished",
 		totals: totalsOf(game),
 		round: open && game.status === "playing" ? roundView(open, created) : null,
+		answered: scored.map((round) => ({
+			index: round.index,
+			target: targetOf(round),
+			guess: {
+				h: round.guessH ?? 0,
+				s: round.guessS ?? 0,
+				l: round.guessL ?? 0,
+			},
+			score: round.score ?? 0,
+		})),
 	};
 }
 
@@ -200,9 +221,9 @@ async function issueRound(
 /** The open round, issuing it first if there's none. */
 async function currentRound(tx: Tx, game: GameRow): Promise<GameView> {
 	const open = await openRound(tx, game);
-	if (open) return gameView(game, open);
+	if (open) return gameView(tx, game, open);
 	const { round, created } = await issueRound(tx, game);
-	return gameView(game, round, created);
+	return gameView(tx, game, round, created);
 }
 
 async function lockGame(
@@ -241,7 +262,7 @@ export async function startGame(
 				.from(games)
 				.where(and(eq(games.dayKey, dayKey), eq(games.userId, userId)))
 				.for("update");
-			if (game.status !== "playing") return gameView(game, null);
+			if (game.status !== "playing") return gameView(tx, game, null);
 			return currentRound(tx, game);
 		}
 
@@ -346,6 +367,6 @@ export async function finishGame(
 			.set({ status: "finished", finishedAt: sql`now()` })
 			.where(eq(games.id, game.id))
 			.returning();
-		return gameView(updated, null);
+		return gameView(tx, updated, null);
 	});
 }

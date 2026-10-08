@@ -221,5 +221,6 @@
 	"mode_meta_done": "Hecho hoy",
 	"memorize_hint": "Memoriza este color",
 	"stamp_out_of": "de 100",
-	"stamp_nailed": "¡Clavado!"
+	"stamp_nailed": "¡Clavado!",
+	"final_rank_today": "Puesto {rank} de hoy"
 }

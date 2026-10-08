@@ -92,6 +92,7 @@ export function useColorMemoryGame(mode: GameMode) {
 		async (view: GameView, fresh: boolean): Promise<void> => {
 			setGameId(view.id);
 			setTotals(view.totals);
+			setHistory(view.answered);
 			if (view.finished) {
 				setAlreadyPlayed(!fresh);
 				setPhase("final");
@@ -199,6 +200,7 @@ export function useColorMemoryGame(mode: GameMode) {
 		void call(async () => {
 			const view = await finishGame({ data: { id: gameId } });
 			setTotals(view.totals);
+			setHistory(view.answered);
 			setPhase("final");
 		});
 	}, [gameId, busy, call]);
