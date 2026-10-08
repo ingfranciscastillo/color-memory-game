@@ -136,6 +136,12 @@ function Home() {
 				>
 					{m.stats_link()}
 				</Link>
+				<Link
+					to="/leaderboard"
+					className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+				>
+					{m.leaderboard_link()}
+				</Link>
 			</div>
 
 			<div className="mt-16 border-t border-border pt-6">

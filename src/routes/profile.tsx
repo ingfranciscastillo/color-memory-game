@@ -77,6 +77,7 @@ interface AccountFormProps {
 		name: string;
 		email: string;
 		avatarSeed?: string | null;
+		showInLeaderboard?: boolean | null;
 	};
 	onChange: () => void;
 }
@@ -120,6 +121,15 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 		}
 		setStatus("saved");
 		onChange();
+	};
+
+	const toggleLeaderboard = async (visible: boolean) => {
+		setError(null);
+		const { error } = await authClient.updateUser({
+			showInLeaderboard: visible,
+		});
+		if (error) setError(m.profile_error());
+		else onChange();
 	};
 
 	const signOut = async () => {
@@ -188,6 +198,29 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 					<dd className="truncate text-sm">{account.email}</dd>
 				</div>
 			</dl>
+
+			<label className="mt-10 flex cursor-pointer items-start gap-4">
+				<input
+					type="checkbox"
+					role="switch"
+					aria-checked={Boolean(account.showInLeaderboard)}
+					checked={Boolean(account.showInLeaderboard)}
+					onChange={(event) => void toggleLeaderboard(event.target.checked)}
+					aria-describedby={`${ids}-leaderboard-hint`}
+					className="mt-0.5 size-4 accent-foreground"
+				/>
+				<span className="space-y-1">
+					<span className="block text-xs uppercase tracking-[0.2em]">
+						{m.profile_leaderboard()}
+					</span>
+					<span
+						id={`${ids}-leaderboard-hint`}
+						className="block text-xs text-muted-foreground"
+					>
+						{m.profile_leaderboard_hint()}
+					</span>
+				</span>
+			</label>
 
 			{error && (
 				<p role="alert" className="mt-6 text-sm text-destructive">

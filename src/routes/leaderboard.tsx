@@ -1,0 +1,313 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Avatar } from "@/components/Avatar";
+import { AuthDialog } from "@/components/account/AuthDialog";
+import { PageHeader } from "@/components/PageHeader";
+import { authClient } from "@/lib/auth-client";
+import { formatNumber, modeLabel } from "@/lib/i18n";
+import {
+	BOARDS,
+	isBoard,
+	isDayKey,
+	type LeaderboardBoard,
+	shiftDay,
+} from "@/lib/leaderboard";
+import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
+import { getLeaderboard } from "@/server/leaderboard";
+import type { LeaderboardEntry } from "@/server/leaderboard-store";
+
+interface Search {
+	board?: LeaderboardBoard;
+	/** Daily board's day; today when absent. */
+	day?: string;
+}
+
+export const Route = createFileRoute("/leaderboard")({
+	validateSearch: (search: Record<string, unknown>): Search => ({
+		board: isBoard(search.board) ? search.board : undefined,
+		day: isDayKey(search.day) ? search.day : undefined,
+	}),
+	head: () => ({
+		meta: [{ title: m.leaderboard_title() }],
+	}),
+	component: LeaderboardPage,
+});
+
+type Data = Awaited<ReturnType<typeof getLeaderboard>>;
+
+const LABEL = "text-xs uppercase tracking-[0.2em] text-muted-foreground";
+const LINK =
+	"text-xs uppercase tracking-[0.3em] text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline";
+
+function LeaderboardPage() {
+	const { board = "daily", day } = Route.useSearch();
+	const [data, setData] = useState<Data | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [reload, setReload] = useState(0);
+	const userId = authClient.useSession().data?.user.id;
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: userId and reload are triggers: refetch when the player or their visibility changes.
+	useEffect(() => {
+		let cancelled = false;
+		setError(null);
+		getLeaderboard({
+			data: { board, day: board === "daily" ? day : undefined },
+		})
+			.then((next) => {
+				if (!cancelled) setData(next);
+			})
+			.catch((thrown: unknown) => {
+				if (!cancelled)
+					setError(
+						thrown instanceof Error ? thrown.message : m.error_network(),
+					);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, [board, day, userId, reload]);
+
+	// Keep showing the previous board until the new one arrives, unless it's stale.
+	const current = data && data.board === board ? data : null;
+
+	return (
+		<main className="mx-auto min-h-screen max-w-2xl px-6 py-10 sm:px-10 sm:py-16">
+			<PageHeader />
+			<h1 className="mt-16 text-4xl font-light uppercase tracking-[0.2em]">
+				{m.leaderboard_heading()}
+			</h1>
+
+			<nav aria-label={m.leaderboard_boards()} className="mt-10">
+				<ul className="flex flex-wrap gap-x-6 gap-y-3">
+					{BOARDS.map((option) => (
+						<li key={option}>
+							<Link
+								to="/leaderboard"
+								search={{ board: option }}
+								aria-current={option === board ? "page" : undefined}
+								className={`text-xs uppercase tracking-[0.3em] transition-opacity ${
+									option === board ? "" : "opacity-45 hover:opacity-80"
+								}`}
+							>
+								{modeLabel(option)}
+							</Link>
+						</li>
+					))}
+				</ul>
+			</nav>
+
+			{error ? (
+				<p role="alert" className="mt-10 text-sm text-destructive">
+					{error}
+				</p>
+			) : !current ? (
+				<p role="status" className={`mt-10 animate-fade-in ${LABEL}`}>
+					{m.loading()}
+				</p>
+			) : (
+				<Board data={current} onJoined={() => setReload((n) => n + 1)} />
+			)}
+		</main>
+	);
+}
+
+function Board({ data, onJoined }: { data: Data; onJoined: () => void }) {
+	const locale = getLocale();
+	const daily = data.board === "daily";
+	const dateFormat = new Intl.DateTimeFormat(locale, {
+		day: "numeric",
+		month: "long",
+		timeZone: "UTC",
+	});
+	const periodLabel = daily
+		? data.period === data.today
+			? m.leaderboard_today()
+			: dateFormat.format(new Date(data.period))
+		: m.leaderboard_week({ date: dateFormat.format(new Date(data.period)) });
+
+	const meInTop =
+		data.me !== null &&
+		data.entries.some((entry) => entry.rank === data.me?.rank);
+
+	return (
+		<div key={`${data.board}-${data.period}`} className="mt-10 animate-rise-in">
+			<div className="flex flex-wrap items-baseline justify-between gap-4">
+				<p className="text-sm uppercase tracking-[0.2em]">{periodLabel}</p>
+				{daily && (
+					<div className="flex gap-6">
+						<Link
+							to="/leaderboard"
+							search={{ board: "daily", day: shiftDay(data.period, -1) }}
+							className={LINK}
+						>
+							{m.leaderboard_prev_day()}
+						</Link>
+						{data.period < data.today && (
+							<Link
+								to="/leaderboard"
+								search={{
+									board: "daily",
+									day:
+										shiftDay(data.period, 1) === data.today
+											? undefined
+											: shiftDay(data.period, 1),
+								}}
+								className={LINK}
+							>
+								{m.leaderboard_next_day()}
+							</Link>
+						)}
+					</div>
+				)}
+			</div>
+			<p className="mt-2 text-sm text-muted-foreground">
+				{daily ? m.leaderboard_rules_daily() : m.leaderboard_rules_weekly()}
+			</p>
+
+			<Invite you={data.you} onJoined={onJoined} />
+
+			{data.entries.length === 0 && !data.me ? (
+				<p className="mt-10 text-sm text-muted-foreground">
+					{m.leaderboard_empty()}
+				</p>
+			) : (
+				<>
+					<table className="mt-10 w-full text-sm tabular-nums">
+						<thead>
+							<tr className="border-b border-border text-left">
+								<th scope="col" className={`w-16 py-3 font-normal ${LABEL}`}>
+									{m.leaderboard_col_rank()}
+								</th>
+								<th scope="col" className={`py-3 font-normal ${LABEL}`}>
+									{m.leaderboard_col_player()}
+								</th>
+								{!daily && (
+									<th
+										scope="col"
+										className={`py-3 text-right font-normal ${LABEL}`}
+									>
+										{m.leaderboard_col_games()}
+									</th>
+								)}
+								<th
+									scope="col"
+									className={`py-3 text-right font-normal ${LABEL}`}
+								>
+									{m.leaderboard_col_score()}
+								</th>
+							</tr>
+						</thead>
+						<tbody className="divide-y divide-border">
+							{data.entries.map((entry) => (
+								<Row
+									key={entry.rank}
+									entry={entry}
+									mine={data.me?.rank === entry.rank}
+									daily={daily}
+								/>
+							))}
+							{data.me && !meInTop && (
+								<Row entry={data.me} mine daily={daily} separated />
+							)}
+						</tbody>
+					</table>
+					<p className={`mt-4 ${LABEL}`}>
+						{m.leaderboard_total({
+							// The cached top may predate your row: never show fewer than your rank.
+							count: formatNumber(Math.max(data.total, data.me?.rank ?? 0)),
+						})}
+					</p>
+				</>
+			)}
+
+			{data.you?.visible && !data.me && data.entries.length > 0 && (
+				<p className="mt-6 text-sm text-muted-foreground">
+					{m.leaderboard_not_ranked()}
+				</p>
+			)}
+		</div>
+	);
+}
+
+function Row({
+	entry,
+	mine,
+	daily,
+	separated = false,
+}: {
+	entry: LeaderboardEntry;
+	mine: boolean;
+	daily: boolean;
+	/** Your row, shown below the top because you're outside it. */
+	separated?: boolean;
+}) {
+	return (
+		<tr
+			className={`${mine ? "bg-muted" : ""} ${separated ? "border-t-2 border-border" : ""}`}
+		>
+			<td className="py-3 pl-2 text-muted-foreground">
+				{formatNumber(entry.rank)}
+			</td>
+			<th scope="row" className="py-3 text-left font-normal">
+				<span className="flex items-center gap-3">
+					<Avatar seed={entry.avatarSeed} size={24} />
+					<span className="truncate">{entry.name}</span>
+					{mine && (
+						<span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+							· {m.leaderboard_you()}
+						</span>
+					)}
+				</span>
+			</th>
+			{!daily && (
+				<td className="py-3 text-right text-muted-foreground">
+					{formatNumber(entry.games ?? 0)}
+				</td>
+			)}
+			<td className="py-3 pr-2 text-right">{formatNumber(entry.score)}</td>
+		</tr>
+	);
+}
+
+/** Invites players who don't appear: anonymous ones to sign in, others to opt in. */
+function Invite({ you, onJoined }: { you: Data["you"]; onJoined: () => void }) {
+	const [signInOpen, setSignInOpen] = useState(false);
+	const [busy, setBusy] = useState(false);
+	const [failed, setFailed] = useState(false);
+
+	if (you?.visible) return null;
+
+	const join = async () => {
+		setBusy(true);
+		setFailed(false);
+		const { error } = await authClient.updateUser({ showInLeaderboard: true });
+		setBusy(false);
+		if (error) setFailed(true);
+		else onJoined();
+	};
+
+	const anonymous = !you || you.anonymous;
+
+	return (
+		<div className="mt-8 flex flex-wrap items-center justify-between gap-4 border border-border p-5">
+			<p className="text-sm">
+				{anonymous ? m.leaderboard_join_anon() : m.leaderboard_join_hidden()}
+			</p>
+			<button
+				type="button"
+				disabled={busy}
+				onClick={() => (anonymous ? setSignInOpen(true) : void join())}
+				className="bg-foreground px-6 py-3 text-xs uppercase tracking-[0.3em] text-background transition-opacity hover:opacity-80 disabled:opacity-60"
+			>
+				{anonymous ? m.account_sign_in() : m.leaderboard_join_button()}
+			</button>
+			{failed && (
+				<p role="alert" className="w-full text-sm text-destructive">
+					{m.profile_error()}
+				</p>
+			)}
+			<AuthDialog open={signInOpen} onClose={() => setSignInOpen(false)} />
+		</div>
+	);
+}
