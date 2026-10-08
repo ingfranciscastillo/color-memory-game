@@ -4,7 +4,7 @@ import { Avatar } from "@/components/Avatar";
 import { AuthDialog } from "@/components/account/AuthDialog";
 import { PageHeader } from "@/components/PageHeader";
 import { authClient } from "@/lib/auth-client";
-import { formatNumber, modeLabel } from "@/lib/i18n";
+import { formatNumber, localizedHead, modeLabel } from "@/lib/i18n";
 import {
 	BOARDS,
 	isBoard,
@@ -28,9 +28,14 @@ export const Route = createFileRoute("/leaderboard")({
 		board: isBoard(search.board) ? search.board : undefined,
 		day: isDayKey(search.day) ? search.day : undefined,
 	}),
-	head: () => ({
-		meta: [{ title: m.leaderboard_title() }],
-	}),
+	head: () => {
+		// One canonical per language: the board/day params don't change what's indexable.
+		const localized = localizedHead("/leaderboard");
+		return {
+			meta: [{ title: m.leaderboard_title() }, ...localized.meta],
+			links: localized.links,
+		};
+	},
 	component: LeaderboardPage,
 });
 

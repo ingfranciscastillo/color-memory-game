@@ -15,7 +15,8 @@
     "check": "biome check",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "changelog": "node scripts/build-changelog.ts"
   },
   "dependencies": {
     "@dicebear/core": "^10.7.0",

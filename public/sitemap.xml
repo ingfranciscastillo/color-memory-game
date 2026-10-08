@@ -6,7 +6,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en" />
     <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en" />
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
@@ -14,7 +14,7 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en" />
     <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en" />
-    <changefreq>monthly</changefreq>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
@@ -32,5 +32,37 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en/play" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://color-memory-game.example.com/en/leaderboard</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es/clasificacion" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en/leaderboard" />
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://color-memory-game.example.com/es/clasificacion</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en/leaderboard" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es/clasificacion" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en/leaderboard" />
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://color-memory-game.example.com/en/changelog</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en/changelog" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es/novedades" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en/changelog" />
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://color-memory-game.example.com/es/novedades</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://color-memory-game.example.com/en/changelog" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://color-memory-game.example.com/es/novedades" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://color-memory-game.example.com/en/changelog" />
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>

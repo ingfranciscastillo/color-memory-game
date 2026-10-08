@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AccountButton } from "@/components/account/AccountButton";
 import { SettingsBar } from "@/components/SettingsBar";
+import { LATEST_RELEASE } from "@/content/changelog";
 import { authClient } from "@/lib/auth-client";
 import {
 	formatNumber,
@@ -146,6 +147,13 @@ function Home() {
 
 			<div className="mt-16 border-t border-border pt-6">
 				<SettingsBar />
+				<Link
+					to="/changelog"
+					aria-label={m.changelog_link({ version: LATEST_RELEASE.version })}
+					className="mt-6 inline-block text-xs uppercase tracking-[0.3em] text-muted-foreground tabular-nums underline-offset-4 transition-colors hover:text-foreground hover:underline"
+				>
+					v{LATEST_RELEASE.version}
+				</Link>
 			</div>
 		</main>
 	);

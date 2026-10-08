@@ -200,5 +200,13 @@
 	"leaderboard_rules_weekly": "Each player's best game this week (Monday to Sunday, UTC).",
 	"profile_leaderboard": "Show me on the leaderboards",
 	"profile_leaderboard_hint": "Your name, avatar and scores appear in the daily and weekly rankings.",
-	"error_invalid_board": "That leaderboard doesn't exist."
+	"error_invalid_board": "That leaderboard doesn't exist.",
+	"changelog_title": "What's new — Color Memory",
+	"changelog_description": "What has changed in Color Memory: new modes, improvements and fixes, version by version.",
+	"changelog_heading": "What's new",
+	"changelog_version": "Version {version}",
+	"changelog_link": "What's new in version {version}",
+	"change_added": "New",
+	"change_improved": "Better",
+	"change_fixed": "Fixed"
 }

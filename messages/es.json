@@ -200,5 +200,13 @@
 	"leaderboard_rules_weekly": "La mejor partida de cada jugador esta semana (de lunes a domingo, UTC).",
 	"profile_leaderboard": "Aparecer en la clasificación",
 	"profile_leaderboard_hint": "Tu nombre, tu avatar y tus puntuaciones aparecen en las clasificaciones diarias y semanales.",
-	"error_invalid_board": "Esa clasificación no existe."
+	"error_invalid_board": "Esa clasificación no existe.",
+	"changelog_title": "Novedades — Color Memory",
+	"changelog_description": "Qué ha cambiado en Color Memory: nuevos modos, mejoras y arreglos, versión a versión.",
+	"changelog_heading": "Novedades",
+	"changelog_version": "Versión {version}",
+	"changelog_link": "Novedades de la versión {version}",
+	"change_added": "Nuevo",
+	"change_improved": "Mejora",
+	"change_fixed": "Arreglo"
 }
