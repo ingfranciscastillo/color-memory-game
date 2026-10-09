@@ -16,6 +16,7 @@ export function CollectionGrid({ userId }: { userId: string }) {
 	const [total, setTotal] = useState(0);
 	const [page, setPage] = useState(0);
 	const [loading, setLoading] = useState(false);
+	const [failed, setFailed] = useState(false);
 	const locale = getLocale();
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: userId is the trigger: start over when the player changes.
@@ -36,12 +37,16 @@ export function CollectionGrid({ userId }: { userId: string }) {
 
 	const more = async () => {
 		setLoading(true);
+		setFailed(false);
 		try {
 			const result = await getCollection({ data: { page: page + 1 } });
 			if (result) {
 				setItems((current) => [...(current ?? []), ...result.items]);
 				setPage(result.page);
 			}
+		} catch {
+			// The button stays, so trying again is one click.
+			setFailed(true);
 		} finally {
 			setLoading(false);
 		}
@@ -86,6 +91,11 @@ export function CollectionGrid({ userId }: { userId: string }) {
 				>
 					{m.collection_more()}
 				</button>
+			)}
+			{failed && (
+				<p role="alert" className="mt-2 text-sm text-destructive">
+					{m.error_network()}
+				</p>
 			)}
 		</div>
 	);
