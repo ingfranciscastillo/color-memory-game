@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { OtherGames } from "@/components/OtherGames";
 import { PageHeader } from "@/components/PageHeader";
 import { ModeFan } from "@/components/swatch/ModeFan";
 import { LATEST_RELEASE } from "@/content/changelog";
@@ -141,6 +142,10 @@ function Home() {
 					v{LATEST_RELEASE.version}
 				</Link>
 			</nav>
+
+			<div className="mt-auto pt-10">
+				<OtherGames />
+			</div>
 		</main>
 	);
 }
