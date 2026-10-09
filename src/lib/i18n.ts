@@ -40,22 +40,35 @@ export function modeDescription(mode: GameMode) {
 	}[mode]();
 }
 
-export const formatNumber = (n: number) =>
-	new Intl.NumberFormat(getLocale()).format(n);
+const formatters = new Map<string, Intl.NumberFormat>();
+
+/**
+ * One Intl.NumberFormat per locale and options: building one is slow, and
+ * the memorize timer formats its seconds several times a second.
+ */
+function numberFormat(options: Intl.NumberFormatOptions = {}) {
+	const locale = getLocale();
+	const key = `${locale}${JSON.stringify(options)}`;
+	let format = formatters.get(key);
+	if (!format) {
+		format = new Intl.NumberFormat(locale, options);
+		formatters.set(key, format);
+	}
+	return format;
+}
+
+export const formatNumber = (n: number) => numberFormat().format(n);
 
 /** `2.5` → "2.5 s" in English, "2,5 s" in Spanish; always one decimal. */
 export const formatSeconds = (seconds: number) =>
-	`${new Intl.NumberFormat(getLocale(), {
+	`${numberFormat({
 		minimumFractionDigits: 1,
 		maximumFractionDigits: 1,
 	}).format(seconds)} s`;
 
 /** `12.5` → "12.5%" in English, "12,5 %" in Spanish. */
 export const formatPercent = (n: number) =>
-	new Intl.NumberFormat(getLocale(), {
-		style: "percent",
-		maximumFractionDigits: 1,
-	}).format(n / 100);
+	numberFormat({ style: "percent", maximumFractionDigits: 1 }).format(n / 100);
 
 /**
  * Canonical, hreflang alternates and og:locale for a route path written

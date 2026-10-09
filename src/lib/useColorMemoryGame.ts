@@ -35,8 +35,23 @@ const randomGuess = (): HSL => ({
 	l: 50,
 });
 
-/** Every game is played on the server: make sure there's a session first. */
-async function ensureSession() {
+/**
+ * Whether the client already holds a session, without a request: true when
+ * a page with the account button (home) loaded it before the game started.
+ */
+function hasKnownSession(): boolean {
+	const state = authClient.$store.atoms.session?.get() as
+		| { data?: unknown }
+		| undefined;
+	return Boolean(state?.data);
+}
+
+/**
+ * Every game is played on the server: make sure there's a session first.
+ * `trustKnown` skips the request when the client already has one.
+ */
+async function ensureSession(trustKnown: boolean) {
+	if (trustKnown && hasKnownSession()) return;
 	const { data } = await authClient.getSession();
 	if (data) return;
 	const { error } = await authClient.signIn.anonymous();
@@ -70,6 +85,7 @@ export function useColorMemoryGame(mode: GameMode) {
 	const [alreadyPlayed, setAlreadyPlayed] = useState(false);
 	const deadline = useRef(0);
 	const retry = useRef<() => void>(() => {});
+	const startFailed = useRef(false);
 
 	const totalRounds = roundsForMode(mode);
 
@@ -129,8 +145,12 @@ export function useColorMemoryGame(mode: GameMode) {
 				setPhase("loading");
 				setAlreadyPlayed(false);
 				setHistory([]);
-				await ensureSession();
+				// Saves a round trip when coming from home. If the start fails
+				// (the known session may have expired), the retry asks the server.
+				await ensureSession(!startFailed.current);
+				startFailed.current = true;
 				const view = await startGame({ data: { mode } });
+				startFailed.current = false;
 				// A daily game with answered rounds is being resumed, not started.
 				await applyView(view, view.totals.roundsPlayed === 0);
 			}),
@@ -142,7 +162,9 @@ export function useColorMemoryGame(mode: GameMode) {
 		void start();
 	}, [start]);
 
-	// Memorize countdown, from the time left the server reported.
+	// Memorize countdown, from the time left the server reported. The label
+	// shows tenths, so `remaining` only changes once per tenth: the same
+	// value again doesn't re-render.
 	useEffect(() => {
 		if (phase !== "memorize") return;
 		const id = window.setInterval(() => {
@@ -154,7 +176,7 @@ export function useColorMemoryGame(mode: GameMode) {
 					setPhase("recreate");
 				});
 			} else {
-				setRemaining(left / 1000);
+				setRemaining(Math.ceil(left / 100) / 10);
 			}
 		}, 50);
 		return () => window.clearInterval(id);

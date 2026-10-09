@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { SwatchCard } from "@/components/swatch/SwatchCard";
 import type { HSL } from "@/lib/color";
 import { colorName } from "@/lib/color-name";
@@ -21,12 +22,14 @@ export function MemorizePhase({
 }) {
 	const left =
 		duration > 0 ? Math.max(0, Math.min(1, remaining / duration)) : 0;
+	const locale = getLocale();
+	const name = useMemo(() => colorName(color, locale), [color, locale]);
 
 	return (
 		<SwatchCard
 			color={color}
 			size="lg"
-			title={colorName(color, getLocale())}
+			title={name}
 			subtitle={m.memorize_hint()}
 			footer={
 				<>
@@ -40,7 +43,8 @@ export function MemorizePhase({
 		>
 			<span
 				aria-hidden="true"
-				className="absolute inset-x-0 bottom-0 h-1 origin-left bg-white/85"
+				// Steps every tenth of a second; the transition glides between them.
+				className="absolute inset-x-0 bottom-0 h-1 origin-left bg-white/85 transition-transform duration-100 ease-linear"
 				style={{ transform: `scaleX(${left})` }}
 			/>
 		</SwatchCard>
