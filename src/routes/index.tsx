@@ -124,7 +124,7 @@ function Home() {
 				</dl>
 			)}
 
-			<nav className="mx-auto mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-muted">
+			<nav className="mx-auto mt-8 mb-12 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-muted">
 				<Link to="/stats" className={link}>
 					{m.stats_link()}
 				</Link>
@@ -140,7 +140,7 @@ function Home() {
 				</Link>
 			</nav>
 
-			<div className="mt-auto border-t border-border pt-6">
+			<div className="mt-auto border-t border-border pt-6 pb-2">
 				<SettingsBar />
 			</div>
 		</main>

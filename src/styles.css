@@ -250,6 +250,14 @@
     border-color: var(--color-border);
   }
 
+  /* Thin scrollbars in the theme's colors. scrollbar-color is inherited,
+     so every scroll container (dialogs, long palettes) follows; the gray
+     stage sets its own. */
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--input) transparent;
+  }
+
   /* Native controls (scrollbars, focus rings) follow the active theme. */
   :root {
     color-scheme: light;

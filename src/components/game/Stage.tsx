@@ -17,7 +17,7 @@ export function Stage({ children }: { children: ReactNode }) {
 	}, []);
 
 	return (
-		<div className="fixed inset-0 z-10 flex flex-col overflow-y-auto bg-stage text-black">
+		<div className="fixed inset-0 z-10 flex flex-col overflow-y-auto bg-stage text-black [scrollbar-color:rgb(0_0_0/0.35)_transparent]">
 			{children}
 		</div>
 	);

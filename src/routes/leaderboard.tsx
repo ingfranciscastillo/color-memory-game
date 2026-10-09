@@ -92,7 +92,7 @@ function LeaderboardPage() {
 								to="/leaderboard"
 								search={{ board: option }}
 								aria-current={option === board ? "page" : undefined}
-								className={`block rounded-full px-3 py-1.5 text-sm font-semibold transition-colors ${
+								className={`flex items-center rounded-full px-3 py-1.5 text-sm font-semibold transition-colors ${
 									option === board
 										? "bg-card shadow-(--shadow-card)"
 										: "text-ink-muted hover:text-ink"
@@ -251,11 +251,13 @@ function Row({
 	separated?: boolean;
 }) {
 	return (
-		<tr
-			className={`${mine ? "bg-muted" : ""} ${separated ? "border-t-2 border-border" : ""}`}
-		>
+		<tr className={separated ? "border-t-2 border-border" : undefined}>
 			<td className="py-3 pl-2 text-ink-muted">{formatNumber(entry.rank)}</td>
-			<th scope="row" className="py-3 text-left font-normal">
+			{/* Your row stands out by weight and "· You", not by a background. */}
+			<th
+				scope="row"
+				className={`py-3 text-left ${mine ? "font-semibold" : "font-normal"}`}
+			>
 				<span className="flex items-center gap-3">
 					<Avatar seed={entry.avatarSeed} size={24} />
 					<span className="truncate">{entry.name}</span>

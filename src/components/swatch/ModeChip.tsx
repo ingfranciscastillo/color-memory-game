@@ -8,7 +8,7 @@ import { type GameMode, MODE_COLORS } from "@/lib/modes";
 export function ModeChip({ mode }: { mode: GameMode }) {
 	const colors = MODE_COLORS[mode];
 	return (
-		<span className="inline-flex items-center gap-2">
+		<span className="inline-flex items-center gap-2 align-middle">
 			<span
 				aria-hidden="true"
 				className="flex h-3 w-2.5 shrink-0 flex-col overflow-hidden rounded-[2px]"
