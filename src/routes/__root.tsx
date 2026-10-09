@@ -3,11 +3,13 @@ import {
 	createRootRoute,
 	HeadContent,
 	Outlet,
+	ScriptOnce,
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import { RegisterServiceWorker } from "@/components/RegisterServiceWorker";
+import { CSP_HEADER, contentSecurityPolicy } from "@/lib/csp";
 import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { THEME_COLORS, THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -16,6 +18,11 @@ import { getLocale } from "@/paraglide/runtime.js";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
+	headers: ({ ssr }) => {
+		// Vite's dev server injects inline scripts without the nonce.
+		if (import.meta.env.DEV || !ssr?.nonce) return undefined;
+		return { [CSP_HEADER]: contentSecurityPolicy(ssr.nonce) };
+	},
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -67,12 +74,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 		<html lang={getLocale()} suppressHydrationWarning>
 			<head>
 				<HeadContent />
-				<script
-					// biome-ignore lint/security/noDangerouslySetInnerHtml: fixed script built from our own constants.
-					dangerouslySetInnerHTML={{
-						__html: THEME_INIT_SCRIPT + MOTION_INIT_SCRIPT,
-					}}
-				/>
+				{/* Fixed script from our own constants; ScriptOnce adds the CSP nonce. */}
+				<ScriptOnce>{THEME_INIT_SCRIPT + MOTION_INIT_SCRIPT}</ScriptOnce>
 			</head>
 			<body>
 				{children}
