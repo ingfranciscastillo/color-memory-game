@@ -3,7 +3,7 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import { MOTION_INIT_SCRIPT } from "@/lib/motion";
-import { SITE_NAME } from "@/lib/seo";
+import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { THEME_COLORS, THEME_INIT_SCRIPT } from "@/lib/theme";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
@@ -22,7 +22,12 @@ export const Route = createRootRoute({
 			{ property: "og:site_name", content: SITE_NAME },
 			{ property: "og:title", content: m.site_title() },
 			{ property: "og:description", content: m.site_description() },
-			{ name: "twitter:card", content: "summary" },
+			{ property: "og:image", content: OG_IMAGE.url },
+			{ property: "og:image:width", content: String(OG_IMAGE.width) },
+			{ property: "og:image:height", content: String(OG_IMAGE.height) },
+			{ property: "og:image:alt", content: m.og_image_alt() },
+			{ name: "twitter:card", content: "summary_large_image" },
+			{ name: "twitter:image", content: OG_IMAGE.url },
 		],
 		links: [
 			{ rel: "stylesheet", href: appCss },

@@ -33,7 +33,13 @@ export const Route = createFileRoute("/leaderboard")({
 		// One canonical per language: the board/day params don't change what's indexable.
 		const localized = localizedHead("/leaderboard");
 		return {
-			meta: [{ title: m.leaderboard_title() }, ...localized.meta],
+			meta: [
+				{ title: m.leaderboard_title() },
+				{ name: "description", content: m.leaderboard_description() },
+				{ property: "og:title", content: m.leaderboard_title() },
+				{ property: "og:description", content: m.leaderboard_description() },
+				...localized.meta,
+			],
 			links: localized.links,
 		};
 	},

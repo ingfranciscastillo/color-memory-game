@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://color-memory-game.example.com/sitemap.xml

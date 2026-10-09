@@ -8,7 +8,7 @@ import { formatNumber, localizedHead, modeLabel } from "@/lib/i18n";
 import type { GameMode } from "@/lib/modes";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 import { m } from "@/paraglide/messages.js";
-import { getLocale } from "@/paraglide/runtime.js";
+import { getLocale, localizeHref } from "@/paraglide/runtime.js";
 import { getSummary } from "@/server/stats";
 import type { PlayerSummary } from "@/server/stats-store";
 
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/")({
 						"@context": "https://schema.org",
 						"@type": "WebApplication",
 						name: SITE_NAME,
-						url: SITE_URL,
+						url: `${SITE_URL}${localizeHref("/")}`,
 						description: m.site_description(),
 						inLanguage: getLocale(),
 						applicationCategory: "GameApplication",

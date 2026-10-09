@@ -27,6 +27,9 @@ export const Route = createFileRoute("/play")({
 		return {
 			meta: [
 				{ title: m.play_title() },
+				// The game screen has no content of its own until it loads a round:
+				// keep it out of the index, but let crawlers follow its links.
+				{ name: "robots", content: "noindex, follow" },
 				{ name: "description", content: m.play_description() },
 				{ property: "og:title", content: m.play_title() },
 				{ property: "og:description", content: m.play_og_description() },
