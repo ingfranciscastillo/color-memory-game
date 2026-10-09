@@ -14,7 +14,8 @@ export function LanguageSwitch() {
 					type="button"
 					lang={l}
 					aria-pressed={l === locale}
-					aria-label={LOCALE_NAMES[l]}
+					// Starts with the visible code, so voice control ("click ES") works.
+					aria-label={`${l.toUpperCase()}, ${LOCALE_NAMES[l]}`}
 					onClick={() => l !== locale && setLocale(l)}
 					className={`rounded-md px-2 py-0.5 text-xs font-semibold uppercase transition-colors ${
 						l === locale

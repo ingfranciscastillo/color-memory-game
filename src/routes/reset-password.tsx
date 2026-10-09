@@ -81,7 +81,7 @@ function ResetPasswordPage() {
 							autoComplete="new-password"
 							value={password}
 							onChange={(event) => setPassword(event.target.value)}
-							className="w-full rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:outline-none"
+							className="w-full rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:ring-1 focus-visible:ring-ink focus-visible:outline-none"
 						/>
 						<button
 							type="submit"

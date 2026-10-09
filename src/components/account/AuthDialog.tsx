@@ -23,7 +23,7 @@ const PROVIDERS: Record<SocialProvider, { label: () => string; path: string }> =
 	};
 
 const INPUT =
-	"w-full rounded-lg border border-input bg-card px-4 py-3 text-sm text-ink placeholder:text-ink-muted transition-colors focus-visible:border-ink focus-visible:outline-none disabled:opacity-60";
+	"w-full rounded-lg border border-input bg-card px-4 py-3 text-sm text-ink placeholder:text-ink-muted transition-colors focus-visible:border-ink focus-visible:ring-1 focus-visible:ring-ink focus-visible:outline-none disabled:opacity-60";
 const LABEL = "text-xs text-ink-muted";
 const LINK =
 	"text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline disabled:opacity-45 disabled:hover:no-underline";

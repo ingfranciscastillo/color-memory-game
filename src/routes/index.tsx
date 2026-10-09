@@ -115,7 +115,7 @@ function Home() {
 							key={label}
 							className="rounded-lg bg-card px-3 py-3 shadow-(--shadow-card)"
 						>
-							<dt className="text-[0.7rem] text-ink-muted">{label}</dt>
+							<dt className="text-xs text-ink-muted">{label}</dt>
 							<dd className="mt-1 text-xl font-semibold tabular-nums">
 								{value}
 							</dd>

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
 import { ColorPicker } from "@/components/ColorPicker";
 import { PaletteSummary } from "@/components/game/PaletteSummary";
@@ -10,12 +10,17 @@ import { MemorizePhase } from "@/components/MemorizePhase";
 import { PageHeader } from "@/components/PageHeader";
 import { ResultPanel } from "@/components/ResultPanel";
 import { SwatchCard } from "@/components/swatch/SwatchCard";
+import { useKeepFocus } from "@/hooks/useKeepFocus";
 import { type HSL, hslToCss } from "@/lib/color";
-import { localizedHead, modeLabel } from "@/lib/i18n";
+import { colorName } from "@/lib/color-name";
+import { formatPercent, localizedHead, modeLabel } from "@/lib/i18n";
 import { type GameMode, isGameMode, todayKey } from "@/lib/modes";
 import { isMotionReduced } from "@/lib/motion";
-import { useColorMemoryGame } from "@/lib/useColorMemoryGame";
+import { EXCELLENT_SCORE } from "@/lib/stats";
+import { type Phase, useColorMemoryGame } from "@/lib/useColorMemoryGame";
 import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
+import type { GuessResult } from "@/server/games-store";
 import { getLeaderboard } from "@/server/leaderboard";
 
 export const Route = createFileRoute("/play")({
@@ -64,11 +69,43 @@ function useDailyRank(active: boolean) {
 	return rank;
 }
 
+/**
+ * What screen readers hear when the phase changes: the same things sighted
+ * players see appear (the color's name, the prompt, the score).
+ */
+function phaseAnnouncement(
+	phase: Phase,
+	target: HSL | null,
+	result: GuessResult | null,
+): string {
+	if (phase === "memorize" && target) {
+		return `${m.memorize_hint()}: ${colorName(target, getLocale())}`;
+	}
+	if (phase === "recreate") return m.recreate_prompt();
+	if (phase === "result" && result) {
+		const { score, differencePct } = result.result;
+		return [
+			`${score} ${m.stamp_out_of()}`,
+			score >= EXCELLENT_SCORE ? m.stamp_nailed() : null,
+			m.result_difference({ percent: formatPercent(differencePct) }),
+		]
+			.filter(Boolean)
+			.join(" · ");
+	}
+	return "";
+}
+
 function Play() {
 	const { mode } = Route.useSearch();
 	const game = useColorMemoryGame(mode);
 	const isEndless = mode === "endless";
 	const rank = useDailyRank(mode === "daily" && game.phase === "final");
+	const heading = useRef<HTMLHeadingElement>(null);
+	useKeepFocus(heading, game.phase);
+	const announcement = useMemo(
+		() => phaseAnnouncement(game.phase, game.target, game.result),
+		[game.phase, game.target, game.result],
+	);
 
 	const errorBlock = game.error && (
 		<div role="alert" className="mt-6 animate-rise-in space-y-3 text-center">
@@ -114,8 +151,19 @@ function Play() {
 		);
 	}
 
+	const roundLabel = isEndless
+		? m.round({ round: game.roundIndex + 1 })
+		: m.round_of({ round: game.roundIndex + 1, total: game.totalRounds });
+
 	return (
 		<Stage>
+			<h1 ref={heading} tabIndex={-1} className="sr-only">
+				{modeLabel(mode)} · {roundLabel}
+			</h1>
+			{/* Mounted for the whole game, so every change is read out. */}
+			<p aria-live="polite" className="sr-only">
+				{announcement}
+			</p>
 			<header className="mx-auto w-full max-w-md px-5 pt-5">
 				<div className="flex items-center justify-between gap-4 text-sm font-semibold">
 					<Link

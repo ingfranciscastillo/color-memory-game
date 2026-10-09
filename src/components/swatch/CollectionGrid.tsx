@@ -73,7 +73,7 @@ export function CollectionGrid({ userId }: { userId: string }) {
 								<SwatchCard color={item.target} size="sm" title={name} />
 								<span
 									aria-hidden="true"
-									className="mt-1.5 line-clamp-2 text-center text-[0.65rem] leading-tight"
+									className="mt-1.5 line-clamp-2 text-center text-xs leading-tight"
 								>
 									{name}
 								</span>

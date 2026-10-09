@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { SwatchCard } from "@/components/swatch/SwatchCard";
+import { useKeepFocus } from "@/hooks/useKeepFocus";
 import { colorName } from "@/lib/color-name";
 import { formatNumber, modeLabel } from "@/lib/i18n";
 import { type GameMode, roundsForMode } from "@/lib/modes";
@@ -71,12 +72,19 @@ export function PaletteSummary({
 	const max = Number.isFinite(roundsForMode(mode))
 		? roundsForMode(mode) * 100
 		: rounds.length * 100;
+	// Reached by pressing Finish, which is gone now: focus starts here.
+	const heading = useRef<HTMLHeadingElement>(null);
+	useKeepFocus(heading);
 
 	return (
 		<div>
-			<p className="text-sm font-semibold text-ink-muted">
+			<h1
+				ref={heading}
+				tabIndex={-1}
+				className="text-sm font-semibold text-ink-muted outline-none"
+			>
 				{modeLabel(mode)} · {m.final_score()}
-			</p>
+			</h1>
 			<p className="mt-1 flex items-baseline gap-3">
 				{/* Screen readers get the total, not every number of the count-up. */}
 				<span className="sr-only">{formatNumber(total)}</span>

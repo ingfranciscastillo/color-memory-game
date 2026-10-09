@@ -79,7 +79,7 @@ export function SwatchCard({
 						</span>
 					)}
 					{footer && (
-						<span className="mt-2 flex justify-between text-[0.65rem] uppercase tracking-[0.12em] text-ink-muted tabular-nums">
+						<span className="mt-2 flex justify-between text-xs uppercase tracking-[0.12em] text-ink-muted tabular-nums">
 							{footer}
 						</span>
 					)}

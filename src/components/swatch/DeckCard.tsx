@@ -21,13 +21,15 @@ export function DeckCard({
 }: DeckCardProps) {
 	return (
 		<span
-			className={`relative flex h-full w-full flex-col rounded-xl bg-card p-2 text-left text-ink transition-shadow duration-200 ${
+			className={`relative flex h-full w-full flex-col rounded-xl bg-card p-2 pb-6 text-left text-ink transition-shadow duration-200 ${
 				selected
 					? "shadow-[0_0_0_2px_var(--ink),var(--shadow-card-lifted)]"
 					: "shadow-(--shadow-card)"
 			}`}
 		>
-			<span className="flex h-[58%] flex-col overflow-hidden rounded-lg">
+			{/* The block takes what the text leaves, so no description, in any
+			    language, runs into the punched hole (pb-6 keeps it clear). */}
+			<span className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg">
 				{colors.map((color) => (
 					<span
 						key={color}
@@ -39,11 +41,11 @@ export function DeckCard({
 			<span className="mt-2 block px-0.5 text-sm font-semibold leading-tight">
 				{title}
 			</span>
-			<span className="mt-1 block px-0.5 text-[0.7rem] leading-snug text-ink-muted">
+			<span className="mt-1 block px-0.5 text-xs leading-snug text-ink-muted">
 				{description}
 			</span>
 			{meta && (
-				<span className="mt-1 block px-0.5 text-[0.7rem] font-medium leading-snug">
+				<span className="mt-1 block px-0.5 text-xs font-medium leading-snug">
 					{meta}
 				</span>
 			)}

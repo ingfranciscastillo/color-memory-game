@@ -65,7 +65,7 @@ export function ScoreStamp({
 				<span className="text-3xl font-extrabold leading-none tabular-nums">
 					{score}
 				</span>
-				<span className="mt-1 text-[0.6rem] font-semibold uppercase tracking-[0.12em]">
+				<span className="mt-1 text-xs font-semibold uppercase tracking-[0.06em]">
 					{nailed ? m.stamp_nailed() : m.stamp_out_of()}
 				</span>
 			</div>

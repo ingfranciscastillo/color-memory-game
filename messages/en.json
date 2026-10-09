@@ -205,7 +205,7 @@
 	"changelog_description": "What has changed in Color Memory: new modes, improvements and fixes, version by version.",
 	"changelog_heading": "What's new",
 	"changelog_version": "Version {version}",
-	"changelog_link": "What's new in version {version}",
+	"changelog_link": "v{version}, what's new",
 	"change_added": "New",
 	"change_improved": "Better",
 	"change_fixed": "Fixed",

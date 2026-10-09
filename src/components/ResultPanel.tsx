@@ -88,7 +88,7 @@ export function ResultPanel({
 			<dl className="mt-4 grid w-full max-w-sm grid-cols-3 gap-px overflow-hidden rounded-xl bg-black/10">
 				{deltas.map(([label, value]) => (
 					<div key={label} className="bg-white px-3 py-3 text-center">
-						<dt className="text-[0.7rem] text-[#5c5b57]">{label}</dt>
+						<dt className="text-xs text-[#5c5b57]">{label}</dt>
 						<dd className="mt-1 text-lg font-semibold tabular-nums">{value}</dd>
 					</div>
 				))}

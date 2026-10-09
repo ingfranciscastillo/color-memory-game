@@ -176,7 +176,7 @@ function AccountForm({ account, onChange }: AccountFormProps) {
 						aria-describedby={`${ids}-name-hint`}
 						value={name}
 						onChange={(event) => setName(event.target.value)}
-						className="min-w-0 flex-1 rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:outline-none"
+						className="min-w-0 flex-1 rounded-lg border border-input bg-card px-4 py-3 text-sm transition-colors focus-visible:border-ink focus-visible:ring-1 focus-visible:ring-ink focus-visible:outline-none"
 					/>
 					<button
 						type="submit"
