@@ -40,6 +40,13 @@ const config = defineConfig({
 					],
 				},
 				{
+					pattern: "/how-to-play",
+					localized: [
+						["en", "/en/how-to-play"],
+						["es", "/es/como-jugar"],
+					],
+				},
+				{
 					pattern: "/changelog",
 					localized: [
 						["en", "/en/changelog"],

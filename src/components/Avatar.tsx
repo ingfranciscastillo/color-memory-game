@@ -25,7 +25,7 @@ export function Avatar({ seed, size = 40, className }: AvatarProps) {
 			alt=""
 			width={size}
 			height={size}
-			className={`shrink-0 ${className ?? ""}`}
+			className={`shrink-0 rounded-full ring-1 ring-ink/15 ${className ?? ""}`}
 			style={{ width: size, height: size }}
 		/>
 	);

@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
-import { SettingsBar } from "@/components/SettingsBar";
 import { ModeFan } from "@/components/swatch/ModeFan";
 import { LATEST_RELEASE } from "@/content/changelog";
 import { authClient } from "@/lib/auth-client";
@@ -124,12 +123,15 @@ function Home() {
 				</dl>
 			)}
 
-			<nav className="mx-auto mt-8 mb-12 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-muted">
+			<nav className="mx-auto mt-8 mb-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-ink-muted">
 				<Link to="/stats" className={link}>
 					{m.stats_link()}
 				</Link>
 				<Link to="/leaderboard" className={link}>
 					{m.leaderboard_link()}
+				</Link>
+				<Link to="/how-to-play" className={link}>
+					{m.howto_link()}
 				</Link>
 				<Link
 					to="/changelog"
@@ -139,10 +141,6 @@ function Home() {
 					v{LATEST_RELEASE.version}
 				</Link>
 			</nav>
-
-			<div className="mt-auto border-t border-border pt-6 pb-2">
-				<SettingsBar />
-			</div>
 		</main>
 	);
 }
