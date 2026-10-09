@@ -5,3 +5,9 @@ blockExoticSubdeps: true
 allowBuilds:
   esbuild: true
   lightningcss: true
+
+# Patched versions of transitive dev tooling flagged by `pnpm audit`
+# (solid-js comes with the TanStack devtools and pins seroval).
+overrides:
+  "solid-js@<1.9.17": "^1.9.17"
+  "source-map-js@<1.2.2": "^1.2.2"
