@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	<meta name="theme-color" content="#f4f3ef">
+	<title>Sin conexión · Offline — Color Memory</title>
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<style>
+		:root { color-scheme: light dark; --paper: #f4f3ef; --card: #fff; --ink: #1a1a1a; --muted: #6b6a66; }
+		@media (prefers-color-scheme: dark) {
+			:root { --paper: #1c1b19; --card: #2a2926; --ink: #f2f1ec; --muted: #a3a29d; }
+		}
+		* { box-sizing: border-box; }
+		body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--paper); color: var(--ink); font: 16px/1.5 system-ui, sans-serif; }
+		main { max-width: 360px; text-align: center; }
+		.chip { width: 96px; margin: 0 auto 28px; padding: 6px; border-radius: 12px; background: var(--card); box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 8px 20px rgb(0 0 0 / .08); }
+		.chip div { height: 80px; border-radius: 8px; background: repeating-linear-gradient(135deg, #cfccc3 0 6px, transparent 6px 12px); }
+		.chip span { display: block; height: 8px; width: 60%; margin: 8px 2px 4px; border-radius: 3px; background: var(--muted); opacity: .4; }
+		h1 { margin: 0; font-size: 1.5rem; letter-spacing: -0.02em; }
+		p { margin: 8px 0 0; color: var(--muted); }
+		hr { border: 0; border-top: 1px solid rgb(127 127 127 / .25); margin: 20px 0; }
+		button { margin-top: 24px; padding: 12px 24px; border: 0; border-radius: 12px; background: var(--ink); color: var(--paper); font: 600 1rem system-ui, sans-serif; cursor: pointer; }
+	</style>
+</head>
+<body>
+	<main>
+		<div class="chip" aria-hidden="true"><div></div><span></span></div>
+		<h1>Sin conexión</h1>
+		<p>Color Memory necesita conexión para jugar: cada ronda se puntúa en el servidor.</p>
+		<hr>
+		<h1 lang="en">You're offline</h1>
+		<p lang="en">Color Memory needs a connection to play: every round is scored on the server.</p>
+		<button type="button" onclick="location.reload()">Reintentar · Retry</button>
+	</main>
+</body>
+</html>

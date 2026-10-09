@@ -1,7 +1,13 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import {
+	createRootRoute,
+	HeadContent,
+	Outlet,
+	Scripts,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
+import { RegisterServiceWorker } from "@/components/RegisterServiceWorker";
 import { MOTION_INIT_SCRIPT } from "@/lib/motion";
 import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { THEME_COLORS, THEME_INIT_SCRIPT } from "@/lib/theme";
@@ -26,16 +32,37 @@ export const Route = createRootRoute({
 			{ property: "og:image:width", content: String(OG_IMAGE.width) },
 			{ property: "og:image:height", content: String(OG_IMAGE.height) },
 			{ property: "og:image:alt", content: m.og_image_alt() },
+			{ name: "mobile-web-app-capable", content: "yes" },
+			{ name: "apple-mobile-web-app-capable", content: "yes" },
+			{ name: "apple-mobile-web-app-title", content: SITE_NAME },
+			{ name: "apple-mobile-web-app-status-bar-style", content: "default" },
 			{ name: "twitter:card", content: "summary_large_image" },
 			{ name: "twitter:image", content: OG_IMAGE.url },
 		],
 		links: [
 			{ rel: "stylesheet", href: appCss },
 			{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+			// Installable app (PWA): manifest, plus the icon iOS uses instead.
+			{ rel: "manifest", href: "/manifest.webmanifest" },
+			{ rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
 		],
 	}),
 	shellComponent: RootDocument,
+	component: RootComponent,
 });
+
+/**
+ * Wraps every page. Client-side effects live here: the shell is the server
+ * document, and its effects don't run in the browser.
+ */
+function RootComponent() {
+	return (
+		<>
+			<Outlet />
+			<RegisterServiceWorker />
+		</>
+	);
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
