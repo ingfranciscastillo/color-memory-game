@@ -2,9 +2,8 @@ import { useEffect } from "react";
 
 /**
  * Registers public/sw.js in production builds only: on the dev server it
- * would cache modules that Vite serves fresh on every change. Rendered by
- * the root route's component, not the document shell, whose effects don't
- * run in the browser.
+ * would cache modules that Vite serves fresh on every change. Rendered once,
+ * by the root route's component.
  */
 export function RegisterServiceWorker() {
 	useEffect(() => {

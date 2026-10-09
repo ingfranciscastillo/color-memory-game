@@ -51,10 +51,7 @@ export const Route = createRootRoute({
 	component: RootComponent,
 });
 
-/**
- * Wraps every page. Client-side effects live here: the shell is the server
- * document, and its effects don't run in the browser.
- */
+/** Wraps every page: the place for app-wide client logic. */
 function RootComponent() {
 	return (
 		<>
