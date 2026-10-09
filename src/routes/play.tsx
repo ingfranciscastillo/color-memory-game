@@ -1,4 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	Link,
+	stripSearchParams,
+} from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BrandMark } from "@/components/BrandMark";
 import { ColorPicker } from "@/components/ColorPicker";
@@ -23,10 +27,15 @@ import { getLocale } from "@/paraglide/runtime.js";
 import type { GuessResult } from "@/server/games-store";
 import { getLeaderboard } from "@/server/leaderboard";
 
+const DEFAULT_MODE: GameMode = "classic";
+
 export const Route = createFileRoute("/play")({
-	validateSearch: (search: Record<string, unknown>): { mode: GameMode } => ({
-		mode: isGameMode(search.mode) ? (search.mode as GameMode) : "classic",
+	validateSearch: (search: { mode?: GameMode }): { mode: GameMode } => ({
+		mode: isGameMode(search.mode) ? search.mode : DEFAULT_MODE,
 	}),
+	// The default mode stays out of the URL: /play is classic as it is, with
+	// no redirect to /play?mode=classic.
+	search: { middlewares: [stripSearchParams({ mode: DEFAULT_MODE })] },
 	head: () => {
 		const localized = localizedHead("/play");
 		return {
