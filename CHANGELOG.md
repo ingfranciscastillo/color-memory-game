@@ -5,6 +5,23 @@ What's new in Color Memory, for players. This file is generated with
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 1.7 - 2026-10-08
+
+### Added
+
+- A How to play page: the steps, scoring, every mode and a few tips.
+- Install Color Memory as an app on your phone or computer.
+
+### Changed
+
+- Language and settings are in the header, with settings grouped in one panel.
+- Round profile pictures.
+- Links to Color Memory show a preview image when shared.
+
+### Fixed
+
+- The daily tab on the leaderboards lines up with the others.
+
 ## 1.6 - 2026-10-08
 
 ### Added

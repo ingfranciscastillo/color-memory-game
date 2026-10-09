@@ -26,6 +26,54 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: readonly ChangelogEntry[] = [
 	{
+		version: "1.7",
+		date: "2026-10-08",
+		changes: [
+			{
+				kind: "added",
+				text: {
+					en: "A How to play page: the steps, scoring, every mode and a few tips.",
+					es: "Página «Cómo se juega»: los pasos, la puntuación, todos los modos y algunos consejos.",
+				},
+			},
+			{
+				kind: "added",
+				text: {
+					en: "Install Color Memory as an app on your phone or computer.",
+					es: "Instala Color Memory como una app en tu móvil u ordenador.",
+				},
+			},
+			{
+				kind: "improved",
+				text: {
+					en: "Language and settings are in the header, with settings grouped in one panel.",
+					es: "El idioma y los ajustes están en la cabecera, con los ajustes agrupados en un panel.",
+				},
+			},
+			{
+				kind: "improved",
+				text: {
+					en: "Round profile pictures.",
+					es: "Fotos de perfil redondas.",
+				},
+			},
+			{
+				kind: "improved",
+				text: {
+					en: "Links to Color Memory show a preview image when shared.",
+					es: "Los enlaces a Color Memory muestran una imagen al compartirlos.",
+				},
+			},
+			{
+				kind: "fixed",
+				text: {
+					en: "The daily tab on the leaderboards lines up with the others.",
+					es: "La pestaña del diario en la clasificación queda alineada con las demás.",
+				},
+			},
+		],
+	},
+	{
 		version: "1.6",
 		date: "2026-10-08",
 		changes: [
