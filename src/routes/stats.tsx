@@ -330,7 +330,7 @@ function Channels({ channels }: { channels: ChannelStats }) {
 								{unit}
 							</dd>
 						</div>
-						<div className="mt-2 h-[2px] bg-border" aria-hidden="true">
+						<div className="mt-2 h-0.5 bg-border" aria-hidden="true">
 							<div
 								className="h-full bg-ink"
 								style={{ width: `${Math.min(100, (value / max) * 100)}%` }}

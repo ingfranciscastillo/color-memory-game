@@ -27,7 +27,7 @@ export function ScoreDistribution({
 		// pt-10: room for the tallest bar's tooltip.
 		<figure aria-labelledby={headingId} className="pt-10">
 			<ol
-				className="flex items-end gap-[2px] border-b border-border"
+				className="flex items-end gap-0.5 border-b border-border"
 				style={{ height: CHART_HEIGHT }}
 			>
 				{distribution.map((count, index) => {
@@ -46,7 +46,7 @@ export function ScoreDistribution({
 							<span className="sr-only">{label}</span>
 							<span
 								aria-hidden="true"
-								className="block w-full rounded-t-[4px] bg-ink transition-opacity group-hover:opacity-70 group-focus-visible:opacity-70"
+								className="block w-full rounded-t-sm bg-ink transition-opacity group-hover:opacity-70 group-focus-visible:opacity-70"
 								style={{
 									height: count ? `${(count / max) * 100}%` : 0,
 									minHeight: count ? 2 : 0,
