@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buildShareText, renderShareImage } from "@/lib/share";
 import { m } from "@/paraglide/messages.js";
 import { getLocale, localizeHref } from "@/paraglide/runtime.js";
@@ -22,6 +22,12 @@ export function ShareSheet({
 	const [status, setStatus] = useState<Status>("idle");
 	const [image, setImage] = useState<string | null>(null);
 	const locale = getLocale();
+
+	// Free the generated image when it's replaced or the sheet goes away.
+	useEffect(() => {
+		if (!image) return;
+		return () => URL.revokeObjectURL(image);
+	}, [image]);
 
 	const share = async () => {
 		setStatus("working");

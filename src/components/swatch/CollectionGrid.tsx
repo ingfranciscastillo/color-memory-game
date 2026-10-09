@@ -61,7 +61,10 @@ export function CollectionGrid({ userId }: { userId: string }) {
 					{items.map((item) => {
 						const name = colorName(item.target, locale);
 						return (
-							<li key={item.at} className="flex flex-col items-center">
+							<li
+								key={`${item.at}-${item.target.h}-${item.target.s}-${item.target.l}`}
+								className="flex flex-col items-center"
+							>
 								<SwatchCard color={item.target} size="sm" title={name} />
 								<span
 									aria-hidden="true"
