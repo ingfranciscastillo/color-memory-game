@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Avatar } from "@/components/Avatar";
-import { AuthDialog } from "@/components/account/AuthDialog";
+import { LazyAuthDialog } from "@/components/account/LazyAuthDialog";
 import { PageHeader } from "@/components/PageHeader";
 import { ModeChip } from "@/components/swatch/ModeChip";
 import { authClient } from "@/lib/auth-client";
@@ -321,7 +321,7 @@ function Invite({ you, onJoined }: { you: Data["you"]; onJoined: () => void }) {
 					{m.profile_error()}
 				</p>
 			)}
-			<AuthDialog open={signInOpen} onClose={() => setSignInOpen(false)} />
+			<LazyAuthDialog open={signInOpen} onClose={() => setSignInOpen(false)} />
 		</div>
 	);
 }

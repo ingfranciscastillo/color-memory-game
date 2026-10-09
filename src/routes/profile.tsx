@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useId, useState } from "react";
 import { Avatar } from "@/components/Avatar";
-import { AuthDialog } from "@/components/account/AuthDialog";
+import { LazyAuthDialog } from "@/components/account/LazyAuthDialog";
 import { PageHeader } from "@/components/PageHeader";
 import { CollectionGrid } from "@/components/swatch/CollectionGrid";
 import { useAccount } from "@/hooks/useAccount";
@@ -40,7 +40,7 @@ function ProfileBody() {
 
 	// Kept mounted while the session refetches (it does after sign-up).
 	const dialog = (
-		<AuthDialog open={signInOpen} onClose={() => setSignInOpen(false)} />
+		<LazyAuthDialog open={signInOpen} onClose={() => setSignInOpen(false)} />
 	);
 
 	if (isPending) return dialog;

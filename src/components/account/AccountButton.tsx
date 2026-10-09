@@ -4,7 +4,11 @@ import { Avatar } from "@/components/Avatar";
 import { useAccount } from "@/hooks/useAccount";
 import { loadAuthProviders } from "@/lib/auth-providers";
 import { m } from "@/paraglide/messages.js";
-import { AuthDialog } from "./AuthDialog";
+import {
+	LazyAuthDialog,
+	preloadAuthDialog,
+	usePreloadAuthDialog,
+} from "./LazyAuthDialog";
 
 const SIZE = 32;
 
@@ -21,11 +25,12 @@ function AccountButtonInner() {
 	useEffect(() => {
 		if (!isPending && !account) void loadAuthProviders();
 	}, [isPending, account]);
+	usePreloadAuthDialog(!isPending && !account);
 
 	// The dialog stays mounted while the session refetches (it does after
 	// sign-up), so its step and notices survive.
 	const dialog = (
-		<AuthDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
+		<LazyAuthDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
 	);
 
 	if (isPending) {
@@ -57,6 +62,8 @@ function AccountButtonInner() {
 			<button
 				type="button"
 				onClick={() => setDialogOpen(true)}
+				onPointerEnter={preloadAuthDialog}
+				onFocus={preloadAuthDialog}
 				className="text-sm text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
 				style={{ minHeight: SIZE }}
 			>
